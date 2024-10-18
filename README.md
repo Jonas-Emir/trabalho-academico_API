@@ -13,6 +13,6 @@ Este repositório contém um sistema de controle de estoque que permite gerencia
 
 ## Tecnologias Utilizadas
 
-- **Linguagem**: 
-- **Framework**: 
-- **Banco de Dados**: 
+- **Linguagem**: ``C#``
+- **Framework**: ``.NET``
+- **Banco de Dados**: ``Microsoft SQL Server``
