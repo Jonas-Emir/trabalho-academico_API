@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Dtos\" />
     <Folder Include="Domain\ValueObjects\" />
     <Folder Include="Tests\UnitTests\" />
   </ItemGroup>

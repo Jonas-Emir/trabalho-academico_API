@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using GestaoEstoque_API.Application.Dtos.Movimentacao;
 
 namespace GestaoEstoque_API.Domain.Entities
 {
@@ -8,7 +9,7 @@ namespace GestaoEstoque_API.Domain.Entities
         [Key] 
         public int ProdutoId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string Nome { get; set; }
 
         [Required] 
@@ -29,9 +30,8 @@ namespace GestaoEstoque_API.Domain.Entities
         public Fornecedor Fornecedor { get; set; }
 
         public DateTime DataCriacao { get; set; }
-
         public DateTime? DataAtualizacao { get; set; }
 
-        public ICollection<MovimentacaoEstoque> MovimentacoesEstoque { get; set; } // N
+        public List<MovimentacaoEstoque> MovimentacoesEstoque { get; set; }
     }
 }

@@ -1,3 +1,5 @@
+using GestaoEstoque_API.Infrastructure.Repositories;
+using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,9 @@ builder.Services.AddEntityFrameworkSqlServer()
            .AddDbContext<AppDbContext>(
            options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
            );
+
+
+builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
 
 var app = builder.Build();
 
