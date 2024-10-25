@@ -1,3 +1,4 @@
+using AutoMapper;
 using GestaoEstoque_API.Infrastructure.Repositories;
 using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ builder.Services.AddEntityFrameworkSqlServer()
            options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
            );
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
 

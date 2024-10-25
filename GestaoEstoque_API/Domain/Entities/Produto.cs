@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using GestaoEstoque_API.Application.Dtos.Movimentacao;
 
 namespace GestaoEstoque_API.Domain.Entities
 {
