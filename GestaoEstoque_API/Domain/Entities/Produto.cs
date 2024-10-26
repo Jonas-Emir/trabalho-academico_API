@@ -8,7 +8,7 @@ namespace GestaoEstoque_API.Domain.Entities
         [Key] 
         public int ProdutoId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string Nome { get; set; }
 
         [Required] 
@@ -29,9 +29,8 @@ namespace GestaoEstoque_API.Domain.Entities
         public Fornecedor Fornecedor { get; set; }
 
         public DateTime DataCriacao { get; set; }
-
         public DateTime? DataAtualizacao { get; set; }
 
-        public ICollection<MovimentacaoEstoque> MovimentacoesEstoque { get; set; } // N
+        public List<MovimentacaoEstoque> MovimentacoesEstoque { get; set; }
     }
 }
