@@ -4,7 +4,6 @@ namespace GestaoEstoque_API.Application.Dtos.Produto
 {
     public class RequestProdutoDto
     {
-        [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string Nome { get; set; }
         public decimal Preco { get; set; }
         public int QuantidadeEstoque { get; set; }

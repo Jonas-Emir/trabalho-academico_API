@@ -25,7 +25,7 @@ namespace API_SistemaDeAtividades.Controllers
         [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<ProdutoResponseDto>> BuscarPorId(int id)
         {
-            var produto = await _produtoRepositorio.BuscarPorId(id);
+            var produto =  _produtoRepositorio.BuscarProdutoPorId(id);
 
             if (produto == null)
                 return NotFound($"Produto com ID {id} não encontrado.");
@@ -44,7 +44,7 @@ namespace API_SistemaDeAtividades.Controllers
         [HttpPut("AtualizarProduto/{id}")]
         public async Task<ActionResult<RequestProdutoDto>> Atualizar([FromBody] RequestProdutoDto produtoDto, int id)
         {
-            var produtoExistente = await _produtoRepositorio.BuscarPorId(id);
+            var produtoExistente =  _produtoRepositorio.BuscarProdutoPorId(id);
 
             if (produtoExistente == null)
                 return NotFound($"Produto com ID {id} não encontrado.");     

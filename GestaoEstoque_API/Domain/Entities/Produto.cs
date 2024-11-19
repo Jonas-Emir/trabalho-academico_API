@@ -8,7 +8,6 @@ namespace GestaoEstoque_API.Domain.Entities
         [Key] 
         public int ProdutoId { get; set; }
 
-        [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string Nome { get; set; }
 
         [Required] 
