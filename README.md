@@ -1,18 +1,23 @@
-# DevBackAPI_Academico
+# **Sistema de Controle de Estoque**
 
-# Sistema de Controle de Estoque
+Este repositório contém o **Sistema de Controle de Estoque**, um projeto desenvolvido como parte da disciplina de **Back-End** no curso de **Análise e Desenvolvimento de Sistemas (ADS)** da **UNIVILLE**. O objetivo é praticar e revisar os principais conceitos de **Programação Orientada a Objetos (POO)** aplicados durante o desenvolvimento da aplicação, como:
+  - Encapsulamento, Herança, Abstração e Polimorfismo.
+  - Princípio de Responsabilidade Única.
+  - Manipulação de bancos de dados.
+  - Organização e boas práticas de programação.
+    
+Este projeto foi projetado para consolidar conhecimentos teóricos e práticos adquiridos na disciplina, permitindo a criação de uma solução funcional para controle de estoque e como parte da inovação proposta para o projeto foi desenvolvido um serviço desktop de monitoramento que possibilita o envio de registros do estoque e das movimentações realizadas, aprimorando o acompanhamento.
 
-Este repositório contém um sistema de controle de estoque que permite gerenciar produtos, monitorar quantidades e realizar operações de entrada e saída de mercadorias. O sistema foi desenvolvido para facilitar a gestão de inventário, proporcionando uma interface amigável e funcionalidades práticas.
+---
 
-## Funcionalidades
+<div align="center">
+  
+🛠️ Este projeto está **em desenvolvimento**. 🚧
 
-- **Cadastro de Produtos**: Adicione novos produtos ao estoque com detalhes como nome, descrição, preço e quantidade.
-- **Atualização de Estoque**: Atualize as quantidades dos produtos quando houver entradas ou saídas.
-- **Visualização de Estoque**: Veja uma lista completa de produtos disponíveis, com suas quantidades atuais.
-- **Relatórios**: Gere relatórios detalhados sobre o estoque, permitindo análise e tomada de decisão.
+</div>
 
-## Tecnologias Utilizadas
+## **Tecnologias Utilizadas**
 
-- **Linguagem**: ``C#``
-- **Framework**: ``.NET``
-- **Banco de Dados**: ``Microsoft SQL Server``
+- **Linguagem**: C#  
+- **Framework**: .NET  
+- **Banco de Dados**: Microsoft SQL Server  
