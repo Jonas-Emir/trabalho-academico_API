@@ -4,13 +4,13 @@ using GestaoEstoque_API.Domain.Entities;
 
 namespace GestaoEstoque_API.Application.Mappers
 {
-    public class ProdutoMapper : Profile
+    public class CategoriaMapper : Profile
     {
-        public ProdutoMapper()
+        public CategoriaMapper()
         {
             CreateMap<Produto, ProdutoResponseDto>();
-            CreateMap<RequestProdutoDto, Produto>();
-            CreateMap<Produto, RequestProdutoDto>();
+            CreateMap<CategoriaResponseDto, Categoria>();
+            CreateMap<ProdutoResponseDto, Produto>();
         }
     }
 }

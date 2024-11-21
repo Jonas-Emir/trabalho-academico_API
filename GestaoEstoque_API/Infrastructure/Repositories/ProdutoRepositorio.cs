@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using GestaoEstoque_API.Application.Dtos.Produto;
+using GestaoEstoque_API.Application.Dtos;
 using GestaoEstoque_API.Domain.Entities;
 using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;

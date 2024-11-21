@@ -1,4 +1,4 @@
-﻿namespace GestaoEstoque_API.Application.Dtos.Movimentacao
+﻿namespace GestaoEstoque_API.Application.Dtos
 {
     public class MovimentacaoEstoqueDto
     {

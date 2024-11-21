@@ -1,15 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GestaoEstoque_API.Application.Dtos.Produto
+namespace GestaoEstoque_API.Application.Dtos
 {
     public class RequestProdutoDto
     {
-        [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string Nome { get; set; }
         public decimal Preco { get; set; }
         public int QuantidadeEstoque { get; set; }
         public bool Ativo { get; set; }
-        public int CategoriaId { get; set; } 
+        public int CategoriaId { get; set; }
         public int FornecedorId { get; set; }
     }
 
