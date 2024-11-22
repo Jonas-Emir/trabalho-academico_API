@@ -6,33 +6,32 @@ public class ProdutoMap : IEntityTypeConfiguration<Produto>
 {
     public void Configure(EntityTypeBuilder<Produto> builder)
     {
-        builder.HasKey(e => e.ProdutoId);
+        builder.HasKey(p => p.ProdutoId);
 
-        builder.Property(e => e.Nome)
+        builder.Property(p => p.Nome)
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(e => e.Preco)
-            .HasColumnType("decimal(18,2)");
+        builder.Property(p => p.Preco)
+            .IsRequired()
+            .HasPrecision(10, 2);
 
-        builder.Property(e => e.QuantidadeEstoque)
+        builder.Property(p => p.Ativo)
             .IsRequired();
 
-        builder.Property(e => e.Ativo)
-            .IsRequired();
+        builder.HasOne(p => p.Categoria)
+            .WithMany()
+            .HasForeignKey(p => p.CategoriaId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(e => e.DataCriacao)
-            .IsRequired();
+        builder.HasOne(p => p.Fornecedor)
+            .WithMany()
+            .HasForeignKey(p => p.FornecedorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(e => e.DataAtualizacao)
-            .IsRequired(false);
-
-        builder.HasOne(d => d.Categoria)
-            .WithMany(p => p.Produtos)
-            .HasForeignKey(d => d.CategoriaId);
-
-        builder.HasOne(d => d.Fornecedor)
-            .WithMany(p => p.Produtos)
-            .HasForeignKey(d => d.FornecedorId);
+        builder.HasMany(p => p.Estoque)
+            .WithOne(e => e.Produto)
+            .HasForeignKey(e => e.ProdutoId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -4,10 +4,10 @@ using GestaoEstoque_API.Application.Enums;
 
 namespace GestaoEstoque_API.Domain.Entities
 {
-    public class MovimentacaoEstoque
+    public class Estoque
     {
         [Key]
-        public int MovimentacaoEstoqueId { get; set; }
+        public int EstoqueId { get; set; }
 
         [Required]
         public int ProdutoId { get; set; } 
@@ -19,11 +19,7 @@ namespace GestaoEstoque_API.Domain.Entities
         public int Quantidade { get; set; } 
 
         [Required]
-        public DateTime DataMovimento { get; set; }
+        public TipoMovimento Id_Tipo_Movimento { get; set; }
 
-        [Required]
-        public TipoMovimento Tipo { get; set; }
-
-        public string Observacao { get; set; }
     }
 }

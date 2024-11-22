@@ -8,14 +8,10 @@ namespace GestaoEstoque_API.Domain.Entities
         [Key] 
         public int ProdutoId { get; set; }
 
-        [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string Nome { get; set; }
 
         [Required] 
         public decimal Preco { get; set; }
-
-        [Required]
-        public int QuantidadeEstoque { get; set; }
 
         [Required]
         public bool Ativo { get; set; }
@@ -31,6 +27,6 @@ namespace GestaoEstoque_API.Domain.Entities
         public DateTime DataCriacao { get; set; }
         public DateTime? DataAtualizacao { get; set; }
 
-        public List<MovimentacaoEstoque> MovimentacoesEstoque { get; set; }
+        public List<Estoque> Estoque { get; set; }
     }
 }

@@ -6,13 +6,26 @@ public class FornecedorMap : IEntityTypeConfiguration<Fornecedor>
 {
     public void Configure(EntityTypeBuilder<Fornecedor> builder)
     {
-        builder.HasKey(e => e.FornecedorId);
+        builder.HasKey(f => f.FornecedorId);
 
-        builder.Property(e => e.Nome)
+        builder.Property(f => f.Nome)
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(e => e.Endereco)
+        builder.Property(f => f.CNPJ)
+            .IsRequired()
+            .HasMaxLength(14);
+
+        builder.Property(f => f.Telefone)
+            .IsRequired()
+            .HasMaxLength(15); 
+
+        builder.Property(f => f.Email)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(f => f.Endereco)
+            .IsRequired()
             .HasMaxLength(200);
     }
 }
