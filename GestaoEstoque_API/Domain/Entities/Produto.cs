@@ -14,9 +14,6 @@ namespace GestaoEstoque_API.Domain.Entities
         public decimal Preco { get; set; }
 
         [Required]
-        public int QuantidadeEstoque { get; set; }
-
-        [Required]
         public bool Ativo { get; set; }
 
         public int CategoriaId { get; set; } 
@@ -30,6 +27,6 @@ namespace GestaoEstoque_API.Domain.Entities
         public DateTime DataCriacao { get; set; }
         public DateTime? DataAtualizacao { get; set; }
 
-        public List<MovimentacaoEstoque> MovimentacoesEstoque { get; set; }
+        public List<Estoque> Estoque { get; set; }
     }
 }
