@@ -1,4 +1,4 @@
-﻿using GestaoEstoque_API.Application.Dtos.Movimentacao;
+﻿using GestaoEstoque_API.Application.Dtos;
 using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
 

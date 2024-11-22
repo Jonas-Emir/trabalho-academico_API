@@ -1,4 +1,4 @@
-﻿using GestaoEstoque_API.Application.Dtos.Movimentacao;
+﻿using GestaoEstoque_API.Application.Dtos;
 
 namespace GestaoEstoque_API.Infrastructure.Repositories.Interface
 {
