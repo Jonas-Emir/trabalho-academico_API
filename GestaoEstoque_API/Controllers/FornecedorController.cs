@@ -2,7 +2,7 @@
 
 namespace GestaoEstoque_API.Controllers
 {
-    public class FornecedoresController : Controller
+    public class FornecedorController : Controller
     {
         public IActionResult Index()
         {

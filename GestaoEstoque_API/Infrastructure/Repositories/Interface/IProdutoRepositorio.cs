@@ -1,5 +1,4 @@
 ﻿using GestaoEstoque_API.Application.Dtos;
-using GestaoEstoque_API.Domain.Entities;
 
 namespace GestaoEstoque_API.Infrastructure.Repositories.Interface
 {

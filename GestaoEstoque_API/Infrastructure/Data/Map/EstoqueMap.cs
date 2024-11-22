@@ -1,6 +1,6 @@
-﻿using GestaoEstoque_API.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using GestaoEstoque_API.Application.Domain.Entities;
 
 public class EstoqueMap : IEntityTypeConfiguration<Estoque>
 {

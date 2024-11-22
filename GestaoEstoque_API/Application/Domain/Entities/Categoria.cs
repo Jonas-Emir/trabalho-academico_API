@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GestaoEstoque_API.Domain.Entities
+namespace GestaoEstoque_API.Application.Domain.Entities
 {
     public class Categoria
     {

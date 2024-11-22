@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using GestaoEstoque_API.Application.Domain.Entities;
 using GestaoEstoque_API.Application.Dtos;
-using GestaoEstoque_API.Domain.Entities;
 using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +29,7 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
         public ProdutoResponseDto BuscarProdutoPorId(int produtoId)
         {
-            var produto = await _dbContext.Produto
+            var produto =  _dbContext.Produto
                 .Include(x => x.Categoria)
                 .Include(x => x.Fornecedor)
                 .FirstOrDefault(x => x.ProdutoId == produtoId);

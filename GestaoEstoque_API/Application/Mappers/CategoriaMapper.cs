@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using GestaoEstoque_API.Application.Domain.Entities;
 using GestaoEstoque_API.Application.Dtos;
-using GestaoEstoque_API.Domain.Entities;
 
 namespace GestaoEstoque_API.Application.Mappers
 {

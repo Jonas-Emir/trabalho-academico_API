@@ -34,7 +34,7 @@ namespace API_SistemaDeAtividades.Controllers
         }
 
         [HttpPost("InserirCategoria")]
-        public async Task<ActionResult<RequestCategoriaDto>> Cadastrar([FromBody] RequestCategoriaDto categoriaDto)
+        public async Task<ActionResult<CategoriaRequestDto>> Cadastrar([FromBody] CategoriaRequestDto categoriaDto)
         {
             var categoriaCriada = await _categoriaRepositorio.Adicionar(categoriaDto);
 
@@ -42,7 +42,7 @@ namespace API_SistemaDeAtividades.Controllers
         }
 
         [HttpPut("AtualizarCategoria/{id}")]
-        public async Task<ActionResult<RequestCategoriaDto>> Atualizar([FromBody] RequestCategoriaDto categoriaDto, int id)
+        public async Task<ActionResult<CategoriaRequestDto>> Atualizar([FromBody] CategoriaRequestDto categoriaDto, int id)
         {
             var categoriaExistente = _categoriaRepositorio.BuscarPorId(id);
 

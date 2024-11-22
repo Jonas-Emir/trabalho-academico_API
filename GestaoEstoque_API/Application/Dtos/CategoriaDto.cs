@@ -7,7 +7,7 @@
         public string Descricao { get; set; }
     }
 
-    public class RequestCategoriaDto
+    public class CategoriaRequestDto
     {
         public string Nome { get; set; }
         public string Descricao { get; set; }

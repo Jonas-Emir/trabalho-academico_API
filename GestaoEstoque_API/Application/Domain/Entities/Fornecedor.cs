@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GestaoEstoque_API.Domain.Entities
+namespace GestaoEstoque_API.Application.Domain.Entities
 {
     public class Fornecedor
     {
-        [Key] 
+        [Key]
         public int FornecedorId { get; set; }
 
-        [Required] 
+        [Required]
         public string Nome { get; set; }
 
-        [Required] 
+        [Required]
         public string CNPJ { get; set; }
 
         [Required]
