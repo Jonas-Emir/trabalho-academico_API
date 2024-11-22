@@ -1,7 +1,6 @@
 ﻿using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
 using GestaoEstoque_API.Application.Dtos;
-using GestaoEstoque_API.Domain.Entities;
 
 namespace API_SistemaDeAtividades.Controllers
 {

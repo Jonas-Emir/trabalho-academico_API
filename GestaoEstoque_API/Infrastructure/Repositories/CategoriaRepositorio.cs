@@ -3,9 +3,6 @@ using GestaoEstoque_API.Application.Dtos;
 using GestaoEstoque_API.Domain.Entities;
 using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GestaoEstoque_API.Infrastructure.Repositories
 {
