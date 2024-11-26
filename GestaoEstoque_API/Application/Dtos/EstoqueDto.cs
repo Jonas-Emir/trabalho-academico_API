@@ -7,7 +7,7 @@ namespace GestaoEstoque_API.Application.Dtos
         public int ProdutoId { get; set; }
         public string ProdutoNome { get; set; }
         public int Quantidade { get; set; }
-        public int TipoMovimentoId { get; set; } // Chave estrangeira
+        public int TipoMovimentoId { get; set; }
     }
 
     public class EstoqueResponseDto
@@ -16,7 +16,7 @@ namespace GestaoEstoque_API.Application.Dtos
         public int ProdutoId { get; set; }
         public string ProdutoNome { get; set; }
         public int Quantidade { get; set; }
-        public int TipoMovimentoId { get; set; } // Chave estrangeira
-        public TipoMovimento TipoMovimento { get; set; } // Propriedade de navegação
+        public int TipoMovimentoId { get; set; }
+        public TipoMovimento TipoMovimento { get; set; }
     }
 }

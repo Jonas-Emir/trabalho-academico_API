@@ -1,8 +1,6 @@
 ﻿using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
-using GestaoEstoque_API.Application.Dtos.Fornecedor;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using GestaoEstoque_API.Application.Dtos;
 
 namespace GestaoEstoque_API.Controllers
 {
@@ -17,17 +15,17 @@ namespace GestaoEstoque_API.Controllers
             _fornecedorRepositorio = fornecedorRepositorio;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<FornecedorResponseDto>>> ListarFornecedores()
+        [HttpGet("ListarFornecedores")]
+        public ActionResult<List<FornecedorResponseDto>> ListarFornecedores()
         {
-            var fornecedores = await _fornecedorRepositorio.BuscarFornecedores();
+            var fornecedores = _fornecedorRepositorio.BuscarFornecedores();
             return Ok(fornecedores);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<FornecedorResponseDto>> BuscarPorId(int id)
+        [HttpGet("BuscarPorId/{id}")]
+        public ActionResult<FornecedorResponseDto> BuscarPorId(int id)
         {
-            var fornecedor = await _fornecedorRepositorio.BuscarPorId(id);
+            var fornecedor = _fornecedorRepositorio.BuscarPorId(id);
 
             if (fornecedor == null)
                 return NotFound($"Fornecedor com ID {id} não encontrado.");
@@ -35,38 +33,35 @@ namespace GestaoEstoque_API.Controllers
             return Ok(fornecedor);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<FornecedorRequestDto>> InserirFornecedor([FromBody] FornecedorRequestDto fornecedor)
+        [HttpPost("InserirFornecedor")]
+        public async Task<ActionResult<FornecedorRequestDto>> Adicionar([FromBody] FornecedorRequestDto fornecedor)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var fornecedorCadastrado = await _fornecedorRepositorio.Adicionar(fornecedor);
-            return CreatedAtAction(nameof(BuscarPorId), new { id = fornecedorCadastrado.FornecedorId }, fornecedorCadastrado);
+            var fornecedorCadastrado = await _fornecedorRepositorio.AdicionarAsync(fornecedor);
+            return Ok(fornecedorCadastrado);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<FornecedorRequestDto>> AtualizarFornecedor([FromBody] FornecedorRequestDto fornecedorDto, int id)
+        [HttpPut("AtualizarFornecedor/{id}")]
+        public async Task<ActionResult<FornecedorRequestDto>> Atualizar([FromBody] FornecedorRequestDto fornecedorDto, int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var fornecedorExistente = await _fornecedorRepositorio.BuscarPorId(id);
+            var fornecedorExistente = _fornecedorRepositorio.BuscarPorId(id);
             if (fornecedorExistente == null)
                 return NotFound($"Fornecedor com ID {id} não encontrado.");
 
-            var fornecedorAtualizado = await _fornecedorRepositorio.Atualizar(fornecedorDto, id);
+            var fornecedorAtualizado = await _fornecedorRepositorio.AtualizarAsync(fornecedorDto, id);
             return Ok(fornecedorAtualizado);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> ApagarFornecedor(int id)
+        [HttpDelete("ApagarFornecedor/{id}")]
+        public ActionResult<bool> ApagarFornecedor(int id)
         {
-            bool apagado = await _fornecedorRepositorio.Apagar(id);
-            if (!apagado)
+            var resposta = _fornecedorRepositorio.Apagar(id);
+            if (string.IsNullOrEmpty(resposta))
                 return NotFound($"Fornecedor com ID {id} não encontrado.");
 
-            return NoContent();
+            return Ok(resposta);
         }
     }
 }

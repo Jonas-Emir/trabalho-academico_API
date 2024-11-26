@@ -2,7 +2,7 @@
 
 namespace GestaoEstoque_API.Application.Domain.Entities
 {
-    public class FornecedorRequestDto
+    public class Fornecedor
     {
         [Key]
         public int FornecedorId { get; set; }
@@ -26,16 +26,5 @@ namespace GestaoEstoque_API.Application.Domain.Entities
         public DateTime DataCriacao { get; set; }
 
         public DateTime? DataAtualizacao { get; set; }
-
-    public class FornecedorResponseDto
-    {
-        public int FornecedorId { get; set; }
-        public string Nome { get; set; }
-        public string CNPJ { get; set; }
-        public string Telefone { get; set; }
-        public string Email { get; set; }
-        public string Endereco { get; set; }
-        public DateTime DataCriacao { get; set; }
-        public DateTime DataAtualizacao { get; set; }
     }
 }

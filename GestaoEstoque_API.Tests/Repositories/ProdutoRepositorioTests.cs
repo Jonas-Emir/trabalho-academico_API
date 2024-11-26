@@ -120,7 +120,6 @@ namespace GestaoEstoque_API.Tests.Repositories
             {
                 Nome = "Jaqueta de Couro Masculina",
                 Preco = 349.99m,
-                QuantidadeEstoque = 120,
                 CategoriaId = 999,
                 FornecedorId = 2,
                 Ativo = true,
@@ -152,7 +151,6 @@ namespace GestaoEstoque_API.Tests.Repositories
             {
                 Nome = "Tênis Esportivo Masculino - Atualizado",
                 Preco = 179.90m,
-                QuantidadeEstoque = 100,
                 CategoriaId = 2,
                 FornecedorId = 2
             };
@@ -175,7 +173,6 @@ namespace GestaoEstoque_API.Tests.Repositories
                        {
                            Nome = "Tênis Esportivo Masculino - Atualizado",
                            Preco = 179.90m,
-                           QuantidadeEstoque = 100,
                            CategoriaId = 2,
                            FornecedorId = 2
                        });
@@ -193,7 +190,6 @@ namespace GestaoEstoque_API.Tests.Repositories
             Assert.Equal(2, resultado.CategoriaId);
             Assert.Equal(2, resultado.FornecedorId);
             Assert.Equal(179.90m, resultado.Preco);
-            Assert.Equal(100, resultado.QuantidadeEstoque);
 
             _mockDbContext.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }

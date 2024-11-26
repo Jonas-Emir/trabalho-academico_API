@@ -36,9 +36,8 @@ namespace API_SistemaDeAtividades.Controllers
         [HttpPost("InserirCategoria")]
         public async Task<ActionResult<CategoriaRequestDto>> Cadastrar([FromBody] CategoriaRequestDto categoriaDto)
         {
-            var categoriaCriada = await _categoriaRepositorio.Adicionar(categoriaDto);
-
-            return Ok(categoriaCriada);
+            var categoriaCadastrada = await _categoriaRepositorio.Adicionar(categoriaDto);
+            return Ok(categoriaCadastrada);
         }
 
         [HttpPut("AtualizarCategoria/{id}")]

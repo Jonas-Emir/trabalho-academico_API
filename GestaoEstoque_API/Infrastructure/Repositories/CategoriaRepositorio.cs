@@ -70,12 +70,20 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
         {
             var categoriaExistente = _dbContext.Categoria.Find(categoriaId);
             if (categoriaExistente == null)
-                return null;
+                return $"Categoria com o ID {categoriaId} não foi encontrada.";
+
+            var produtosVinculados = VerificarProdutosVinculadosPorCategoria(categoriaId);
+
+            if (produtosVinculados.Any())
+            {
+                var produtos = string.Join(", ", produtosVinculados);
+                return $"Não é possível excluir a categoria com ID {categoriaId}. Produtos vinculados: {produtos}.";
+            }
 
             _dbContext.Categoria.Remove(categoriaExistente);
             _dbContext.SaveChanges();
 
-            return $"Categoria com o ID {categoriaId} foi apagada com sucesso."; 
+            return $"Categoria com o ID {categoriaId} foi apagada com sucesso.";
         }
 
         #region Métodos auxiliares
@@ -84,6 +92,16 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
             return await _dbContext.Categoria
                 .Where(c => c.Nome == nomeCategoria && (categoriaId == null || c.CategoriaId != categoriaId))
                 .AnyAsync();
+        }
+
+        private List<string> VerificarProdutosVinculadosPorCategoria(int categoriaId)
+        {
+            var produtosVinculados = _dbContext.Produto
+                .Where(p => p.CategoriaId == categoriaId)
+                .Select(p => p.Nome)
+                .ToList();
+
+            return produtosVinculados;
         }
         #endregion
     }
