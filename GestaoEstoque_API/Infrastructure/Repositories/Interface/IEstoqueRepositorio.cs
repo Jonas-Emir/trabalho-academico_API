@@ -4,10 +4,11 @@ namespace GestaoEstoque_API.Infrastructure.Repositories.Interface
 {
     public interface IEstoqueRepositorio
     {
-        Task<List<EstoqueDto>> BuscarEstoques();
-        Task<EstoqueDto> BuscarPorId(int produtoId);
-        Task<EstoqueDto> Adicionar(EstoqueDto produtoDto);
-        Task<EstoqueDto> Atualizar(EstoqueDto produtoDto, int produtoId);
-        Task<bool> Apagar(int produtoId);
+        Task<List<EstoqueResponseDto>> BuscarEstoques();
+        Task<EstoqueResponseDto> BuscarPorId(int estoqueId);
+        Task<EstoqueResponseDto> BuscarPorProduto(int produtoId);
+        Task<EstoqueRequestDto> Adicionar(EstoqueRequestDto estoqueDto);
+        Task<EstoqueRequestDto> Atualizar(EstoqueRequestDto produtoDto, int estoqueId);
+        Task<bool> Apagar(int estoqueId);
     }
 }

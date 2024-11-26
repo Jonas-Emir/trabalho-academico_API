@@ -16,14 +16,14 @@ namespace GestaoEstoque_API.Controllers
         }
 
         [HttpGet("ListarEstoques")]
-        public async Task<ActionResult<List<EstoqueDto>>> BuscarTodosEstoques()
+        public async Task<ActionResult<List<EstoqueResponseDto>>> BuscarTodosEstoques()
         {
             var estoques = await _estoqueRepositorio.BuscarEstoques();
             return Ok(estoques);
         }
 
         [HttpGet("BuscarPorId/{id}")]
-        public async Task<ActionResult<EstoqueDto>> BuscarPorId(int id)
+        public async Task<ActionResult<EstoqueResponseDto>> BuscarPorId(int id)
         {
             var estoque = await _estoqueRepositorio.BuscarPorId(id);
 
@@ -33,8 +33,22 @@ namespace GestaoEstoque_API.Controllers
             return Ok(estoque);
         }
 
+        [HttpGet("produto/{produtoId:int}")]
+        public async Task<IActionResult> BuscarPorProduto(int produtoId)
+        {
+            var estoque = await _estoqueRepositorio.BuscarPorProduto(produtoId);
+
+            if (estoque == null)
+            {
+                return NotFound(new { mensagem = "Produto não encontrado no estoque." });
+            }
+
+            return Ok(estoque);
+        }
+
+
         [HttpPost("InserirEstoque")]
-        public async Task<ActionResult<EstoqueDto>> Cadastrar([FromBody] EstoqueDto estoque)
+        public async Task<ActionResult<EstoqueRequestDto>> Cadastrar([FromBody] EstoqueRequestDto estoque)
         {
             var estoqueCadastrado = await _estoqueRepositorio.Adicionar(estoque);
 
@@ -42,7 +56,7 @@ namespace GestaoEstoque_API.Controllers
         }
 
         [HttpPut("AtualizarEstoque/{id}")]
-        public async Task<ActionResult<EstoqueDto>> Atualizar([FromBody] EstoqueDto estoqueDto, int id)
+        public async Task<ActionResult<EstoqueRequestDto>> Atualizar([FromBody] EstoqueRequestDto estoqueDto, int id)
         {
             var estoqueExistente = await _estoqueRepositorio.BuscarPorId(id);
 

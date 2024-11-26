@@ -45,7 +45,6 @@ namespace API_SistemaDeAtividades.Controllers
         public async Task<ActionResult<CategoriaRequestDto>> Atualizar([FromBody] CategoriaRequestDto categoriaDto, int id)
         {
             var categoriaExistente = _categoriaRepositorio.BuscarPorId(id);
-
             if (categoriaExistente == null)
                 return NotFound($"Categoria com ID {id} não encontrada.");
 
@@ -54,13 +53,13 @@ namespace API_SistemaDeAtividades.Controllers
         }
 
         [HttpDelete("ApagarCategoria/{id}")]
-        public async Task<ActionResult<bool>> Apagar(int id)
+        public async Task<ActionResult<string>> Apagar(int id)
         {
-            bool apagado = _categoriaRepositorio.Apagar(id);
-            if (!apagado)
+            var resposta = _categoriaRepositorio.Apagar(id);
+            if (string.IsNullOrEmpty(resposta))
                 return NotFound($"Categoria com ID {id} não encontrada.");
 
-            return Ok(apagado);
+            return Ok(resposta);
         }
     }
 }

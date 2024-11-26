@@ -19,7 +19,7 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
         public List<CategoriaResponseDto> BuscarCategorias()
         {
             var categorias = _dbContext.Categoria
-                .Include(c => c.Produtos) 
+                .Include(c => c.Produtos)
                 .ToList();
 
             return _mapper.Map<List<CategoriaResponseDto>>(categorias);
@@ -28,7 +28,7 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
         public CategoriaResponseDto BuscarPorId(int categoriaId)
         {
             var categoria = _dbContext.Categoria
-                .Include(c => c.Produtos) 
+                .Include(c => c.Produtos)
                 .FirstOrDefault(c => c.CategoriaId == categoriaId);
 
             if (categoria == null)
@@ -39,8 +39,11 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
         public async Task<CategoriaRequestDto> Adicionar(CategoriaRequestDto categoriaDto)
         {
-            var categoria = _mapper.Map<Categoria>(categoriaDto);
+            var categoriaExistente = await VerificarCategoriaExistente(categoriaDto.Nome);
+            if (categoriaExistente)
+                throw new Exception($"A categoria com o nome '{categoriaDto.Nome}' já está cadastrada.");
 
+            var categoria = _mapper.Map<Categoria>(categoriaDto);
             await _dbContext.Categoria.AddAsync(categoria);
             await _dbContext.SaveChangesAsync();
 
@@ -50,9 +53,10 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
         public async Task<CategoriaRequestDto> Atualizar(CategoriaRequestDto categoriaDto, int categoriaId)
         {
             var categoriaExistente = await _dbContext.Categoria.FindAsync(categoriaId);
+            var categoriaRepetida = await VerificarCategoriaExistente(categoriaDto.Nome);
 
-            if (categoriaExistente == null)
-                throw new Exception($"Categoria para o ID: {categoriaId} não foi encontrada no banco de dados, atualização não realizada.");
+            if (categoriaRepetida)
+                throw new Exception($"A categoria com o nome '{categoriaDto.Nome}' já está cadastrada.");
 
             _mapper.Map(categoriaDto, categoriaExistente);
 
@@ -62,17 +66,25 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
             return _mapper.Map<CategoriaRequestDto>(categoriaExistente);
         }
 
-        public bool Apagar(int categoriaId)
+        public string Apagar(int categoriaId)
         {
             var categoriaExistente = _dbContext.Categoria.Find(categoriaId);
-
             if (categoriaExistente == null)
-                throw new Exception($"Categoria para o ID: {categoriaId} não foi encontrada no banco de dados.");
+                return null;
 
             _dbContext.Categoria.Remove(categoriaExistente);
             _dbContext.SaveChanges();
 
-            return true;
+            return $"Categoria com o ID {categoriaId} foi apagada com sucesso."; 
         }
+
+        #region Métodos auxiliares
+        private async Task<bool> VerificarCategoriaExistente(string nomeCategoria, int? categoriaId = null)
+        {
+            return await _dbContext.Categoria
+                .Where(c => c.Nome == nomeCategoria && (categoriaId == null || c.CategoriaId != categoriaId))
+                .AnyAsync();
+        }
+        #endregion
     }
 }

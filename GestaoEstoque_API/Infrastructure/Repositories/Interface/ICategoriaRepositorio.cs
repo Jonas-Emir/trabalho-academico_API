@@ -8,6 +8,6 @@ namespace GestaoEstoque_API.Infrastructure.Repositories.Interface
         CategoriaResponseDto BuscarPorId(int categoriaId);
         Task<CategoriaRequestDto> Adicionar(CategoriaRequestDto categoriaDto);
         Task<CategoriaRequestDto> Atualizar(CategoriaRequestDto categoriaDto, int categoriaId);
-        bool Apagar(int categoriaId);
+        string Apagar(int categoriaId);
     }
 }

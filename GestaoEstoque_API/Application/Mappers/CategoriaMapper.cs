@@ -8,9 +8,10 @@ namespace GestaoEstoque_API.Application.Mappers
     {
         public CategoriaMapper()
         {
-            CreateMap<Produto, ProdutoResponseDto>();
+            CreateMap<Categoria, CategoriaResponseDto>();
             CreateMap<CategoriaResponseDto, Categoria>();
-            CreateMap<ProdutoResponseDto, Produto>();
+            CreateMap<CategoriaRequestDto, Categoria>();
+            CreateMap<Categoria, CategoriaRequestDto>();
         }
     }
 }

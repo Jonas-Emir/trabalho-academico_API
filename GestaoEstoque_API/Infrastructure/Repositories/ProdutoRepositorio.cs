@@ -42,11 +42,11 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
         public async Task<RequestProdutoDto> Adicionar(RequestProdutoDto produtoDto)
         {
-            var categoriaExistente = await _dbContext.Categoria.FindAsync(produtoDto.CategoriaId);
-            if (categoriaExistente == null)
-            {
-                throw new Exception($"A categoria com ID {produtoDto.CategoriaId} não existe. Por favor vincule a uma categoria e um fornecedor existente.");
-            }
+            await VerificarExistenciaEntidadesCategoriaFornecedor(produtoDto.CategoriaId, produtoDto.FornecedorId);
+
+            var produtoExistente = await VerificarProdutoExistente(produtoDto.Nome);
+            if (produtoExistente)
+                throw new Exception($"O produto com o nome '{produtoDto.Nome}' já está cadastrado.");
 
             var produto = _mapper.Map<Produto>(produtoDto);
             produto.DataCriacao = DateTime.Now;
@@ -85,6 +85,35 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
             return true;
         }
+
+        #region Métodos auxiliares
+        private async Task VerificarExistenciaEntidadesCategoriaFornecedor(int categoriaId, int fornecedorId)
+        {
+            var verificacoes = new (Func<Task<bool>> Verificacao, string Mensagem)[]
+            {
+                 (async () => !await _dbContext.Categoria.AnyAsync(c => c.CategoriaId == categoriaId), $"A categoria com ID {categoriaId} não existe."),
+                 (async () => !await _dbContext.Fornecedor.AnyAsync(f => f.FornecedorId == fornecedorId), $"O fornecedor com ID {fornecedorId} não existe.")
+            };
+
+            var erros = new List<string>();
+
+            foreach (var (verificacao, mensagem) in verificacoes)
+            {
+                if (await verificacao())
+                    erros.Add(mensagem);
+            }
+
+            if (erros.Any())
+                throw new Exception(string.Join(" ", erros));
+        }
+
+        private async Task<bool> VerificarProdutoExistente(string nomeProduto, int? produtoId = null)
+        {
+            return await _dbContext.Produto
+                .Where(p => p.Nome == nomeProduto && (produtoId == null || p.ProdutoId != produtoId))
+                .AnyAsync();
+        }
+        #endregion
     }
 }
 
