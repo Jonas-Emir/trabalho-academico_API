@@ -18,50 +18,85 @@ namespace GestaoEstoque_API.Controllers
         [HttpGet("ListarFornecedores")]
         public ActionResult<List<FornecedorResponseDto>> ListarFornecedores()
         {
-            var fornecedores = _fornecedorRepositorio.BuscarFornecedores();
-            return Ok(fornecedores);
+            try
+            {
+                var fornecedores = _fornecedorRepositorio.BuscarFornecedores();
+                return Ok(fornecedores);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao listar fornecedores: {ex.Message}");
+            }
         }
 
         [HttpGet("BuscarPorId/{id}")]
         public ActionResult<FornecedorResponseDto> BuscarPorId(int id)
         {
-            var fornecedor = _fornecedorRepositorio.BuscarPorId(id);
+            try
+            {
+                var fornecedor = _fornecedorRepositorio.BuscarPorId(id);
 
-            if (fornecedor == null)
-                return NotFound($"Fornecedor com ID {id} não encontrado.");
+                if (fornecedor == null)
+                    return NotFound($"Fornecedor com ID {id} não encontrado.");
 
-            return Ok(fornecedor);
+                return Ok(fornecedor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao buscar fornecedor: {ex.Message}");
+            }
         }
 
         [HttpPost("InserirFornecedor")]
         public async Task<ActionResult<FornecedorRequestDto>> Adicionar([FromBody] FornecedorRequestDto fornecedor)
         {
-            var fornecedorCadastrado = await _fornecedorRepositorio.AdicionarAsync(fornecedor);
-            return Ok(fornecedorCadastrado);
+            try
+            {
+                var fornecedorCadastrado = await _fornecedorRepositorio.AdicionarAsync(fornecedor);
+                return Ok(fornecedorCadastrado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao cadastrar fornecedor: {ex.Message}");
+            }
         }
 
         [HttpPut("AtualizarFornecedor/{id}")]
         public async Task<ActionResult<FornecedorRequestDto>> Atualizar([FromBody] FornecedorRequestDto fornecedorDto, int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var fornecedorExistente = _fornecedorRepositorio.BuscarPorId(id);
-            if (fornecedorExistente == null)
-                return NotFound($"Fornecedor com ID {id} não encontrado.");
+                var fornecedorExistente = _fornecedorRepositorio.BuscarPorId(id);
+                if (fornecedorExistente == null)
+                    return NotFound($"Fornecedor com ID {id} não encontrado.");
 
-            var fornecedorAtualizado = await _fornecedorRepositorio.AtualizarAsync(fornecedorDto, id);
-            return Ok(fornecedorAtualizado);
+                var fornecedorAtualizado = await _fornecedorRepositorio.AtualizarAsync(fornecedorDto, id);
+                return Ok(fornecedorAtualizado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao atualizar fornecedor: {ex.Message}");
+            }
         }
 
         [HttpDelete("ApagarFornecedor/{id}")]
         public ActionResult<bool> ApagarFornecedor(int id)
         {
-            var resposta = _fornecedorRepositorio.Apagar(id);
-            if (string.IsNullOrEmpty(resposta))
-                return NotFound($"Fornecedor com ID {id} não encontrado.");
+            try
+            {
+                var resposta = _fornecedorRepositorio.Apagar(id);
+                if (string.IsNullOrEmpty(resposta))
+                    return NotFound($"Fornecedor com ID {id} não encontrado.");
 
-            return Ok(resposta);
+                return Ok(resposta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao apagar fornecedor: {ex.Message}");
+            }
         }
     }
 }

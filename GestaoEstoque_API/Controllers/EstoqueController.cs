@@ -18,63 +18,103 @@ namespace GestaoEstoque_API.Controllers
         [HttpGet("ListarEstoques")]
         public async Task<ActionResult<List<EstoqueResponseDto>>> BuscarTodosEstoques()
         {
-            var estoques = await _estoqueRepositorio.BuscarEstoques();
-            return Ok(estoques);
+            try
+            {
+                var estoques = await _estoqueRepositorio.BuscarEstoques();
+                return Ok(estoques);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao listar estoques: {ex.Message}");
+            }
         }
 
         [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<EstoqueResponseDto>> BuscarPorId(int id)
         {
-            var estoque = await _estoqueRepositorio.BuscarPorId(id);
+            try
+            {
+                var estoque = await _estoqueRepositorio.BuscarPorId(id);
 
-            if (estoque == null)
-                return NotFound($"Estoque com ID {id} não encontrado.");
+                if (estoque == null)
+                    return NotFound($"Estoque com ID {id} não encontrado.");
 
-            return Ok(estoque);
+                return Ok(estoque);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao buscar estoque: {ex.Message}");
+            }
         }
 
         [HttpGet("produto/{produtoId:int}")]
         public async Task<IActionResult> BuscarPorProduto(int produtoId)
         {
-            var estoque = await _estoqueRepositorio.BuscarPorProduto(produtoId);
-
-            if (estoque == null)
+            try
             {
-                return NotFound(new { mensagem = "Produto não encontrado no estoque." });
+                var estoque = await _estoqueRepositorio.BuscarPorProduto(produtoId);
+
+                if (estoque == null)
+                {
+                    return NotFound(new { mensagem = "Produto não encontrado no estoque." });
+                }
+
+                return Ok(estoque);
             }
-
-            return Ok(estoque);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao buscar produto no estoque: {ex.Message}");
+            }
         }
-
 
         [HttpPost("InserirEstoque")]
         public async Task<ActionResult<EstoqueRequestDto>> Cadastrar([FromBody] EstoqueRequestDto estoque)
         {
-            var estoqueCadastrado = await _estoqueRepositorio.Adicionar(estoque);
-
-            return Ok(estoqueCadastrado);
+            try
+            {
+                var estoqueCadastrado = await _estoqueRepositorio.Adicionar(estoque);
+                return Ok(estoqueCadastrado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao cadastrar estoque: {ex.Message}");
+            }
         }
 
         [HttpPut("AtualizarEstoque/{id}")]
         public async Task<ActionResult<EstoqueRequestDto>> Atualizar([FromBody] EstoqueRequestDto estoqueDto, int id)
         {
-            var estoqueExistente = await _estoqueRepositorio.BuscarPorId(id);
+            try
+            {
+                var estoqueExistente = await _estoqueRepositorio.BuscarPorId(id);
 
-            if (estoqueExistente == null)
-                return NotFound($"Estoque com ID {id} não encontrado.");
+                if (estoqueExistente == null)
+                    return NotFound($"Estoque com ID {id} não encontrado.");
 
-            var estoqueAtualizado = await _estoqueRepositorio.Atualizar(estoqueDto, id);
-            return Ok(estoqueAtualizado);
+                var estoqueAtualizado = await _estoqueRepositorio.Atualizar(estoqueDto, id);
+                return Ok(estoqueAtualizado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao atualizar estoque: {ex.Message}");
+            }
         }
 
         [HttpDelete("ApagarEstoque/{id}")]
         public async Task<ActionResult<bool>> Apagar(int id)
         {
-            bool apagado = await _estoqueRepositorio.Apagar(id);
-            if (!apagado)
-                return NotFound($"Estoque com ID {id} não encontrado.");
+            try
+            {
+                bool apagado = await _estoqueRepositorio.Apagar(id);
+                if (!apagado)
+                    return NotFound($"Estoque com ID {id} não encontrado.");
 
-            return Ok(apagado);
+                return Ok(apagado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao apagar estoque: {ex.Message}");
+            }
         }
     }
 }

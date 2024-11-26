@@ -18,47 +18,82 @@ namespace API_SistemaDeAtividades.Controllers
         [HttpGet("ListarCategorias")]
         public async Task<ActionResult<List<CategoriaResponseDto>>> BuscarTodasCategorias()
         {
-            var categorias = _categoriaRepositorio.BuscarCategorias();
-            return Ok(categorias);
+            try
+            {
+                var categorias = _categoriaRepositorio.BuscarCategorias();
+                return Ok(categorias);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao listar categorias: {ex.Message}");
+            }
         }
 
         [HttpGet("BuscarPorId/{id}")]
         public async Task<ActionResult<CategoriaResponseDto>> BuscarPorId(int id)
         {
-            var categoria = _categoriaRepositorio.BuscarPorId(id);
+            try
+            {
+                var categoria = _categoriaRepositorio.BuscarPorId(id);
 
-            if (categoria == null)
-                return NotFound($"Categoria com ID {id} não encontrada.");
+                if (categoria == null)
+                    return NotFound($"Categoria com ID {id} não encontrada.");
 
-            return Ok(categoria);
+                return Ok(categoria);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao buscar categoria: {ex.Message}");
+            }
         }
 
         [HttpPost("InserirCategoria")]
         public async Task<ActionResult<CategoriaRequestDto>> Cadastrar([FromBody] CategoriaRequestDto categoriaDto)
         {
-            var categoriaCadastrada = await _categoriaRepositorio.Adicionar(categoriaDto);
-            return Ok(categoriaCadastrada);
+            try
+            {
+                var categoriaCadastrada = await _categoriaRepositorio.Adicionar(categoriaDto);
+                return Ok(categoriaCadastrada);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao cadastrar categoria: {ex.Message}");
+            }
         }
 
         [HttpPut("AtualizarCategoria/{id}")]
         public async Task<ActionResult<CategoriaRequestDto>> Atualizar([FromBody] CategoriaRequestDto categoriaDto, int id)
         {
-            var categoriaExistente = _categoriaRepositorio.BuscarPorId(id);
-            if (categoriaExistente == null)
-                return NotFound($"Categoria com ID {id} não encontrada.");
+            try
+            {
+                var categoriaExistente = _categoriaRepositorio.BuscarPorId(id);
+                if (categoriaExistente == null)
+                    return NotFound($"Categoria com ID {id} não encontrada.");
 
-            var categoriaAtualizada = await _categoriaRepositorio.Atualizar(categoriaDto, id);
-            return Ok(categoriaAtualizada);
+                var categoriaAtualizada = await _categoriaRepositorio.Atualizar(categoriaDto, id);
+                return Ok(categoriaAtualizada);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao atualizar categoria: {ex.Message}");
+            }
         }
 
         [HttpDelete("ApagarCategoria/{id}")]
         public async Task<ActionResult<string>> Apagar(int id)
         {
-            var resposta = _categoriaRepositorio.Apagar(id);
-            if (string.IsNullOrEmpty(resposta))
-                return NotFound($"Categoria com ID {id} não encontrada.");
+            try
+            {
+                var resposta = _categoriaRepositorio.Apagar(id);
+                if (string.IsNullOrEmpty(resposta))
+                    return NotFound($"Categoria com ID {id} não encontrada.");
 
-            return Ok(resposta);
+                return Ok(resposta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao apagar categoria: {ex.Message}");
+            }
         }
     }
 }
