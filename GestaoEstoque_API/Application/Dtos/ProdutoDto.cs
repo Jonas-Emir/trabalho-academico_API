@@ -6,7 +6,6 @@ namespace GestaoEstoque_API.Application.Dtos
     {
         public string Nome { get; set; }
         public decimal Preco { get; set; }
-        public int QuantidadeEstoque { get; set; }
         public bool Ativo { get; set; }
         public int CategoriaId { get; set; }
         public int FornecedorId { get; set; }
@@ -17,7 +16,6 @@ namespace GestaoEstoque_API.Application.Dtos
         public int ProdutoId { get; set; }
         public string Nome { get; set; }
         public decimal Preco { get; set; }
-        public int QuantidadeEstoque { get; set; }
         public bool Ativo { get; set; }
         public string CategoriaNome { get; set; }
         public string FornecedorNome { get; set; }

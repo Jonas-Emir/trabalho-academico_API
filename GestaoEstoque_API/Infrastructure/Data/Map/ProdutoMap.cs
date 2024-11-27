@@ -1,4 +1,4 @@
-﻿using GestaoEstoque_API.Domain.Entities;
+﻿using GestaoEstoque_API.Application.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

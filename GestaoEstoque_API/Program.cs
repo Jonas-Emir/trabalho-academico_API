@@ -20,6 +20,10 @@ builder.Services.AddEntityFrameworkSqlServer()
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
+builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
+builder.Services.AddScoped<IFornecedorRepositorio, FornecedorRepositorio>();
+builder.Services.AddScoped<IEstoqueRepositorio, EstoqueRepositorio>();
+
 
 var app = builder.Build();
 

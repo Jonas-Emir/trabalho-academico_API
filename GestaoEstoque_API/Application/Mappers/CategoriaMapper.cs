@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using GestaoEstoque_API.Application.Domain.Entities;
 using GestaoEstoque_API.Application.Dtos;
-using GestaoEstoque_API.Domain.Entities;
 
 namespace GestaoEstoque_API.Application.Mappers
 {
@@ -8,9 +8,10 @@ namespace GestaoEstoque_API.Application.Mappers
     {
         public CategoriaMapper()
         {
-            CreateMap<Produto, ProdutoResponseDto>();
+            CreateMap<Categoria, CategoriaResponseDto>();
             CreateMap<CategoriaResponseDto, Categoria>();
-            CreateMap<ProdutoResponseDto, Produto>();
+            CreateMap<CategoriaRequestDto, Categoria>();
+            CreateMap<Categoria, CategoriaRequestDto>();
         }
     }
 }

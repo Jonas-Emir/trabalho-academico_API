@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using GestaoEstoque_API.Application.Enums;
 
-namespace GestaoEstoque_API.Domain.Entities
+namespace GestaoEstoque_API.Application.Domain.Entities
 {
     public class Estoque
     {
@@ -10,13 +10,13 @@ namespace GestaoEstoque_API.Domain.Entities
         public int EstoqueId { get; set; }
 
         [Required]
-        public int ProdutoId { get; set; } 
+        public int ProdutoId { get; set; }
 
         [ForeignKey("ProdutoId")]
-        public Produto Produto { get; set; } 
+        public Produto Produto { get; set; }
 
         [Required]
-        public int Quantidade { get; set; } 
+        public int Quantidade { get; set; }
 
         [Required]
         public TipoMovimento Id_Tipo_Movimento { get; set; }

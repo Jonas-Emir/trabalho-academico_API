@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using GestaoEstoque_API.Application.Domain.Entities;
 using GestaoEstoque_API.Application.Dtos;
-using GestaoEstoque_API.Domain.Entities;
 using GestaoEstoque_API.Infrastructure.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,8 +18,8 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
         }
         public List<CategoriaResponseDto> BuscarCategorias()
         {
-            var categorias = _dbContext.Categorias
-                .Include(c => c.Produtos) 
+            var categorias = _dbContext.Categoria
+                .Include(c => c.Produtos)
                 .ToList();
 
             return _mapper.Map<List<CategoriaResponseDto>>(categorias);
@@ -27,8 +27,8 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
         public CategoriaResponseDto BuscarPorId(int categoriaId)
         {
-            var categoria = _dbContext.Categorias
-                .Include(c => c.Produtos) 
+            var categoria = _dbContext.Categoria
+                .Include(c => c.Produtos)
                 .FirstOrDefault(c => c.CategoriaId == categoriaId);
 
             if (categoria == null)
@@ -37,42 +37,72 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
             return _mapper.Map<CategoriaResponseDto>(categoria);
         }
 
-        public async Task<RequestCategoriaDto> Adicionar(RequestCategoriaDto categoriaDto)
+        public async Task<CategoriaRequestDto> Adicionar(CategoriaRequestDto categoriaDto)
         {
-            var categoria = _mapper.Map<Categoria>(categoriaDto);
+            var categoriaExistente = await VerificarCategoriaExistente(categoriaDto.Nome);
+            if (categoriaExistente)
+                throw new Exception($"A categoria com o nome '{categoriaDto.Nome}' já está cadastrada.");
 
-            await _dbContext.Categorias.AddAsync(categoria);
+            var categoria = _mapper.Map<Categoria>(categoriaDto);
+            await _dbContext.Categoria.AddAsync(categoria);
             await _dbContext.SaveChangesAsync();
 
-            return _mapper.Map<RequestCategoriaDto>(categoria);
+            return _mapper.Map<CategoriaRequestDto>(categoria);
         }
 
-        public async Task<RequestCategoriaDto> Atualizar(RequestCategoriaDto categoriaDto, int categoriaId)
+        public async Task<CategoriaRequestDto> Atualizar(CategoriaRequestDto categoriaDto, int categoriaId)
         {
-            var categoriaExistente = await _dbContext.Categorias.FindAsync(categoriaId);
+            var categoriaExistente = await _dbContext.Categoria.FindAsync(categoriaId);
+            var categoriaRepetida = await VerificarCategoriaExistente(categoriaDto.Nome);
 
-            if (categoriaExistente == null)
-                throw new Exception($"Categoria para o ID: {categoriaId} não foi encontrada no banco de dados, atualização não realizada.");
+            if (categoriaRepetida)
+                throw new Exception($"A categoria com o nome '{categoriaDto.Nome}' já está cadastrada.");
 
             _mapper.Map(categoriaDto, categoriaExistente);
 
-            _dbContext.Categorias.Update(categoriaExistente);
+            _dbContext.Categoria.Update(categoriaExistente);
             await _dbContext.SaveChangesAsync();
 
-            return _mapper.Map<RequestCategoriaDto>(categoriaExistente);
+            return _mapper.Map<CategoriaRequestDto>(categoriaExistente);
         }
 
-        public bool Apagar(int categoriaId)
+        public string Apagar(int categoriaId)
         {
-            var categoriaExistente = _dbContext.Categorias.Find(categoriaId);
-
+            var categoriaExistente = _dbContext.Categoria.Find(categoriaId);
             if (categoriaExistente == null)
-                throw new Exception($"Categoria para o ID: {categoriaId} não foi encontrada no banco de dados.");
+                return $"Categoria com o ID {categoriaId} não foi encontrada.";
 
-            _dbContext.Categorias.Remove(categoriaExistente);
+            var produtosVinculados = VerificarProdutosVinculadosPorCategoria(categoriaId);
+
+            if (produtosVinculados.Any())
+            {
+                var produtos = string.Join(", ", produtosVinculados);
+                return $"Não é possível excluir a categoria com ID {categoriaId}. Produtos vinculados: {produtos}.";
+            }
+
+            _dbContext.Categoria.Remove(categoriaExistente);
             _dbContext.SaveChanges();
 
-            return true;
+            return $"Categoria com o ID {categoriaId} foi apagada com sucesso.";
         }
+
+        #region Métodos auxiliares
+        private async Task<bool> VerificarCategoriaExistente(string nomeCategoria, int? categoriaId = null)
+        {
+            return await _dbContext.Categoria
+                .Where(c => c.Nome == nomeCategoria && (categoriaId == null || c.CategoriaId != categoriaId))
+                .AnyAsync();
+        }
+
+        private List<string> VerificarProdutosVinculadosPorCategoria(int categoriaId)
+        {
+            var produtosVinculados = _dbContext.Produto
+                .Where(p => p.CategoriaId == categoriaId)
+                .Select(p => p.Nome)
+                .ToList();
+
+            return produtosVinculados;
+        }
+        #endregion
     }
 }

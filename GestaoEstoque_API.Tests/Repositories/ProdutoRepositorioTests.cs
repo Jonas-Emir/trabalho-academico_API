@@ -1,10 +1,10 @@
 ﻿using Moq;
 using AutoMapper;
-using GestaoEstoque_API.Application.Dtos.Produto;
-using GestaoEstoque_API.Domain.Entities;
 using GestaoEstoque_API.Infrastructure.Repositories;
 using MockQueryable.Moq;
 using Microsoft.EntityFrameworkCore;
+using GestaoEstoque_API.Application.Domain.Entities;
+using GestaoEstoque_API.Application.Dtos;
 
 
 namespace GestaoEstoque_API.Tests.Repositories
@@ -33,58 +33,40 @@ namespace GestaoEstoque_API.Tests.Repositories
                 ProdutoId = 1,
                 Nome = "Camiseta Polo Masculina",
                 Preco = 89.99m,
-                QuantidadeEstoque = 200,
                 Ativo = true,
                 CategoriaId = 1,
                 FornecedorId = 1,
                 Categoria = new Categoria { CategoriaId = 1, Nome = "Roupas Masculinas" },
                 Fornecedor = new Fornecedor { FornecedorId = 1, Nome = "Fashion Trends" },
                 DataCriacao = DateTime.UtcNow.AddMonths(-3),
-                MovimentacoesEstoque = new List<MovimentacaoEstoque>
-                {
-                    new MovimentacaoEstoque { Quantidade = 30, DataMovimento = DateTime.UtcNow.AddDays(-10) },
-                    new MovimentacaoEstoque { Quantidade = 50, DataMovimento = DateTime.UtcNow.AddDays(-5) }
-                }
             },
             new Produto
             {
                 ProdutoId = 2,
                 Nome = "Tênis Running Feminino",
                 Preco = 199.90m,
-                QuantidadeEstoque = 75,
                 Ativo = true,
                 CategoriaId = 2,
                 FornecedorId = 2,
                 Categoria = new Categoria { CategoriaId = 2, Nome = "Calçados Femininos" },
                 Fornecedor = new Fornecedor { FornecedorId = 2, Nome = "RunStyle" },
                 DataCriacao = DateTime.UtcNow.AddMonths(-1),
-                MovimentacoesEstoque = new List<MovimentacaoEstoque>
-                {
-                    new MovimentacaoEstoque { Quantidade = 10, DataMovimento = DateTime.UtcNow.AddDays(-3) },
-                    new MovimentacaoEstoque { Quantidade = 15, DataMovimento = DateTime.UtcNow.AddDays(-2) }
-                }
             },
             new Produto {
                 ProdutoId = 3,
                 Nome = "Relógio de Pulso Masculino",
                 Preco = 499.99m,
-                QuantidadeEstoque = 50,
                 Ativo = false,
                 CategoriaId = 3,
                 FornecedorId = 3,
                 Categoria = new Categoria { CategoriaId = 3, Nome = "Acessórios Masculinos" },
                 Fornecedor = new Fornecedor { FornecedorId = 3, Nome = "TimeStyle" },
                 DataCriacao = DateTime.UtcNow.AddMonths(-6),
-                MovimentacoesEstoque = new List<MovimentacaoEstoque>
-                {
-                    new MovimentacaoEstoque { Quantidade = 5, DataMovimento = DateTime.UtcNow.AddMonths(-2) },
-                    new MovimentacaoEstoque { Quantidade = 10, DataMovimento = DateTime.UtcNow.AddMonths(-4) }
-                }
             }
            };
 
             var mockProdutoDbSet = produtos.AsQueryable().BuildMockDbSet();
-            _mockDbContext.Setup(db => db.Produtos).Returns(mockProdutoDbSet.Object);
+            _mockDbContext.Setup(db => db.Produto).Returns(mockProdutoDbSet.Object);
 
             var produtoDtos = new List<ProdutoResponseDto> {
            new ProdutoResponseDto { ProdutoId = 1, Nome = "Camiseta Polo Masculina", CategoriaNome = "Roupas Masculinas", FornecedorNome = "Fashion Trends" },
@@ -125,7 +107,7 @@ namespace GestaoEstoque_API.Tests.Repositories
             mockDbSet.As<IQueryable<Produto>>()
                      .Setup(m => m.GetEnumerator()).Returns(produtos.GetEnumerator());
 
-            _mockDbContext.Setup(db => db.Produtos).Returns(mockDbSet.Object);
+            _mockDbContext.Setup(db => db.Produto).Returns(mockDbSet.Object);
 
             var exception = Assert.Throws<KeyNotFoundException>(() => _repositorio.BuscarProdutoPorId(produtoId));
             Assert.Equal($"Produto com ID {produtoId} não encontrado.", exception.Message);
@@ -138,13 +120,12 @@ namespace GestaoEstoque_API.Tests.Repositories
             {
                 Nome = "Jaqueta de Couro Masculina",
                 Preco = 349.99m,
-                QuantidadeEstoque = 120,
                 CategoriaId = 999,
                 FornecedorId = 2,
                 Ativo = true,
             };
 
-            _mockDbContext.Setup(db => db.Categorias.FindAsync(produtoDto.CategoriaId))
+            _mockDbContext.Setup(db => db.Categoria.FindAsync(produtoDto.CategoriaId))
                           .ReturnsAsync((Categoria)null);
 
             var exception = await Assert.ThrowsAsync<Exception>(() => _repositorio.Adicionar(produtoDto));
@@ -160,7 +141,6 @@ namespace GestaoEstoque_API.Tests.Repositories
                 ProdutoId = produtoId,
                 Nome = "Tênis Esportivo Masculino",
                 Preco = 199.90m,
-                QuantidadeEstoque = 150,
                 CategoriaId = 1,
                 FornecedorId = 1,
                 DataCriacao = DateTime.UtcNow.AddMonths(-2),
@@ -171,12 +151,11 @@ namespace GestaoEstoque_API.Tests.Repositories
             {
                 Nome = "Tênis Esportivo Masculino - Atualizado",
                 Preco = 179.90m,
-                QuantidadeEstoque = 100,
                 CategoriaId = 2,
                 FornecedorId = 2
             };
 
-            _mockDbContext.Setup(db => db.Produtos.FindAsync(produtoId))
+            _mockDbContext.Setup(db => db.Produto.FindAsync(produtoId))
                           .ReturnsAsync(produtoExistente);
 
             _mockMapper.Setup(m => m.Map(produtoDto, produtoExistente))
@@ -184,7 +163,6 @@ namespace GestaoEstoque_API.Tests.Repositories
                        {
                            dest.Nome = src.Nome;
                            dest.Preco = src.Preco;
-                           dest.QuantidadeEstoque = src.QuantidadeEstoque;
                            dest.CategoriaId = src.CategoriaId;
                            dest.FornecedorId = src.FornecedorId;
                            dest.DataAtualizacao = DateTime.UtcNow;
@@ -195,7 +173,6 @@ namespace GestaoEstoque_API.Tests.Repositories
                        {
                            Nome = "Tênis Esportivo Masculino - Atualizado",
                            Preco = 179.90m,
-                           QuantidadeEstoque = 100,
                            CategoriaId = 2,
                            FornecedorId = 2
                        });
@@ -203,7 +180,7 @@ namespace GestaoEstoque_API.Tests.Repositories
             _mockDbContext.Setup(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()))
                           .ReturnsAsync(1);
 
-            _mockDbContext.Setup(db => db.Produtos.Update(It.IsAny<Produto>()))
+            _mockDbContext.Setup(db => db.Produto.Update(It.IsAny<Produto>()))
                           .Verifiable();
 
             var resultado = await _repositorio.Atualizar(produtoDto, produtoId);
@@ -213,7 +190,6 @@ namespace GestaoEstoque_API.Tests.Repositories
             Assert.Equal(2, resultado.CategoriaId);
             Assert.Equal(2, resultado.FornecedorId);
             Assert.Equal(179.90m, resultado.Preco);
-            Assert.Equal(100, resultado.QuantidadeEstoque);
 
             _mockDbContext.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -226,32 +202,27 @@ namespace GestaoEstoque_API.Tests.Repositories
                 ProdutoId = 1,
                 Nome = "Camiseta Masculina",
                 Preco = 99.90m,
-                QuantidadeEstoque = 50,
                 CategoriaId = 1,
                 FornecedorId = 1,
                 Categoria = new Categoria { CategoriaId = 1, Nome = "Roupas Masculinas" },
                 Fornecedor = new Fornecedor { FornecedorId = 1, Nome = "Fashion Trends" },
-                DataCriacao = DateTime.UtcNow.AddMonths(-3),
-                MovimentacoesEstoque = new List<MovimentacaoEstoque> {
-                  new MovimentacaoEstoque { Quantidade = 20, DataMovimento = DateTime.UtcNow.AddDays(-10) },
-                  new MovimentacaoEstoque { Quantidade = 30, DataMovimento = DateTime.UtcNow.AddDays(-5) }
-                  }
+                DataCriacao = DateTime.UtcNow.AddMonths(-3)
             };
 
-            _mockDbContext.Setup(db => db.Produtos.FindAsync(1)).ReturnsAsync(produtoExistente);
+            _mockDbContext.Setup(db => db.Produto.FindAsync(1)).ReturnsAsync(produtoExistente);
             _mockDbContext.Setup(db => db.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
             var resultado = await _repositorio.Apagar(1);
             Assert.True(resultado);
 
             _mockDbContext.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            _mockDbContext.Verify(db => db.Produtos.Remove(produtoExistente), Times.Once);
+            _mockDbContext.Verify(db => db.Produto.Remove(produtoExistente), Times.Once);
         }
 
         [Fact]
         public async Task Apagar_ProdutoNaoExistente_LancaException()
         {
-            _mockDbContext.Setup(db => db.Produtos.FindAsync(1)).ReturnsAsync((Produto)null);
+            _mockDbContext.Setup(db => db.Produto.FindAsync(1)).ReturnsAsync((Produto)null);
             await Assert.ThrowsAsync<Exception>(() => _repositorio.Apagar(1));
         }
     }

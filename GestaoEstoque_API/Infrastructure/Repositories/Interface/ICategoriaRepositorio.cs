@@ -1,5 +1,4 @@
 ﻿using GestaoEstoque_API.Application.Dtos;
-using GestaoEstoque_API.Domain.Entities;
 
 namespace GestaoEstoque_API.Infrastructure.Repositories.Interface
 {
@@ -7,8 +6,8 @@ namespace GestaoEstoque_API.Infrastructure.Repositories.Interface
     {
         List<CategoriaResponseDto> BuscarCategorias();
         CategoriaResponseDto BuscarPorId(int categoriaId);
-        Task<RequestCategoriaDto> Adicionar(RequestCategoriaDto categoriaDto);
-        Task<RequestCategoriaDto> Atualizar(RequestCategoriaDto categoriaDto, int categoriaId);
-        bool Apagar(int categoriaId);
+        Task<CategoriaRequestDto> Adicionar(CategoriaRequestDto categoriaDto);
+        Task<CategoriaRequestDto> Atualizar(CategoriaRequestDto categoriaDto, int categoriaId);
+        string Apagar(int categoriaId);
     }
 }
