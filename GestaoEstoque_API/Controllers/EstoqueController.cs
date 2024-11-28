@@ -47,17 +47,15 @@ namespace GestaoEstoque_API.Controllers
             }
         }
 
-        [HttpGet("produto/{produtoId:int}")]
-        public async Task<IActionResult> BuscarPorProduto(int produtoId)
+        [HttpGet("BuscarQuantidadeEstoquePorProduto/{produtoId:int}")]
+        public async Task<IActionResult> BuscarQuantidadeEstoquePorProduto(int produtoId)
         {
             try
             {
-                var estoque = await _estoqueRepositorio.BuscarPorProduto(produtoId);
+                var estoque = await _estoqueRepositorio.BuscarQuantidadeEstoquePorProduto(produtoId);
 
                 if (estoque == null)
-                {
                     return NotFound(new { mensagem = "Produto não encontrado no estoque." });
-                }
 
                 return Ok(estoque);
             }
@@ -65,6 +63,24 @@ namespace GestaoEstoque_API.Controllers
             {
                 return StatusCode(500, $"Erro ao buscar produto no estoque: {ex.Message}");
             }
+        }
+
+        [HttpGet("QuantidadePorTipoMovimentoProduto/{produtoId}")]
+        public async Task<ActionResult<QuantidadePorTipoMovimentoResponseDto>> GetQuantidadePorTipoMovimento(int produtoId)
+        {
+            var produto = await _estoqueRepositorio.VerificarSeProdutoExisteAsync(produtoId);
+
+            if (produto == null)
+                return NotFound($"Produto com ID {produtoId} não encontrado.");
+            var quantidadePorTipo = await _estoqueRepositorio.BuscarQuantidadePorTipoMovimento(produtoId);
+
+            var response = new QuantidadePorTipoMovimentoResponseDto
+            {
+                ProdutoId = produtoId,
+                ProdutoNome = produto.ProdutoNome,
+                QuantidadePorTipoMovimento = quantidadePorTipo
+            };
+            return Ok(response);
         }
 
         [HttpPost("InserirEstoque")]

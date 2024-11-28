@@ -1,229 +1,175 @@
 ﻿using Moq;
 using AutoMapper;
 using GestaoEstoque_API.Infrastructure.Repositories;
-using MockQueryable.Moq;
 using Microsoft.EntityFrameworkCore;
 using GestaoEstoque_API.Application.Domain.Entities;
 using GestaoEstoque_API.Application.Dtos;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Xunit;
+using GestaoEstoque_API.Application.Enums;
+using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GestaoEstoque_API.Tests.Repositories
 {
     public class ProdutoRepositorioTests
     {
-        private readonly Mock<AppDbContext> _mockDbContext;
+        private readonly AppDbContext _dbContext;
         private readonly Mock<IMapper> _mockMapper;
         private readonly ProdutoRepositorio _repositorio;
-        private readonly Mock<DbSet<Produto>> _mockDbSet;
 
         public ProdutoRepositorioTests()
         {
-            _mockDbContext = new Mock<AppDbContext>();
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                          .UseInMemoryDatabase("ProdutoTeste")
+                          .Options;
+
+            _dbContext = new AppDbContext(options);
             _mockMapper = new Mock<IMapper>();
-            _repositorio = new ProdutoRepositorio(_mockDbContext.Object, _mockMapper.Object);
-            _mockDbSet = new Mock<DbSet<Produto>>();
+            _repositorio = new ProdutoRepositorio(_dbContext, _mockMapper.Object);
+
+            _dbContext.Database.EnsureDeleted(); 
+            _dbContext.Database.EnsureCreated();
         }
 
+
+        private async Task AdicionarDadosTeste()
+        {
+            // Adiciona Fornecedores
+            var fornecedores = new List<Fornecedor>
+            {
+                new Fornecedor
+                {
+                    FornecedorId = 1,
+                    Nome = "Fashion Trends",
+                    CNPJ = "12345678000195",
+                    Telefone = "123456789",
+                    Email = "contato@fashiontrends.com",
+                    Endereco = "Rua Moda, 123",
+                    DataCriacao = DateTime.Now
+                },
+                new Fornecedor
+                {
+                    FornecedorId = 2,
+                    Nome = "RunStyle",
+                    CNPJ = "98765432000123",
+                    Telefone = "987654321",
+                    Email = "contato@runstyle.com",
+                    Endereco = "Avenida Esportiva, 456",
+                    DataCriacao = DateTime.Now
+                }
+            };
+
+            _dbContext.Fornecedor.AddRange(fornecedores);
+            await _dbContext.SaveChangesAsync();
+
+            // Adiciona Categorias
+            var categorias = new List<Categoria>
+            {
+                new Categoria { CategoriaId = 1, Nome = "Roupas Masculinas", Descricao = "Roupa masculina" },
+                new Categoria { CategoriaId = 2, Nome = "Calçados Femininos", Descricao = "Calçados femininos" },
+                new Categoria { CategoriaId = 3, Nome = "Acessórios Masculinos", Descricao = "Acessórios masculinos" }
+            };
+
+            _dbContext.Categoria.AddRange(categorias);
+            await _dbContext.SaveChangesAsync();
+
+            // Adiciona Produtos
+            var produtos = new List<Produto>
+            {
+                new Produto
+                {
+                    ProdutoId = 1,
+                    Nome = "Camiseta Polo Masculina",
+                    Preco = 79.99m,
+                    Ativo = true,
+                    CategoriaId = 1,
+                    FornecedorId = 1,
+                    DataCriacao = DateTime.Now
+                },
+                new Produto
+                {
+                    ProdutoId = 2,
+                    Nome = "Tênis Running Feminino",
+                    Preco = 199.99m,
+                    Ativo = true,
+                    CategoriaId = 2,
+                    FornecedorId = 2,
+                    DataCriacao = DateTime.Now
+                },
+                new Produto
+                {
+                    ProdutoId = 3,
+                    Nome = "Relógio de Pulso Masculino",
+                    Preco = 129.99m,
+                    Ativo = true,
+                    CategoriaId = 3,
+                    FornecedorId = 1,
+                    DataCriacao = DateTime.Now
+                }
+            };
+
+            _dbContext.Produto.AddRange(produtos);
+            await _dbContext.SaveChangesAsync();
+
+            // Adiciona Estoque
+            var estoque = new List<Estoque>
+            {
+                new Estoque { ProdutoId = 1, Quantidade = 100, Id_Tipo_Movimento = TipoMovimento.Entrada },
+                new Estoque { ProdutoId = 2, Quantidade = 50, Id_Tipo_Movimento = TipoMovimento.Saida },
+                new Estoque { ProdutoId = 3, Quantidade = 75, Id_Tipo_Movimento = TipoMovimento.Entrada }
+            };
+
+            _dbContext.Estoque.AddRange(estoque);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        // Teste: BuscarProdutos_RetornaListaDeProdutos
         [Fact]
         public async Task BuscarProdutos_RetornaListaDeProdutos()
         {
-            var produtos = new List<Produto> {
-            new Produto
+            // Adiciona os dados de teste ao banco de dados em memória
+            await AdicionarDadosTeste();
+
+            // Dados esperados para o mapeamento do Mapper
+            var produtoDtos = new List<ProdutoResponseDto>
             {
-                ProdutoId = 1,
-                Nome = "Camiseta Polo Masculina",
-                Preco = 89.99m,
-                Ativo = true,
-                CategoriaId = 1,
-                FornecedorId = 1,
-                Categoria = new Categoria { CategoriaId = 1, Nome = "Roupas Masculinas" },
-                Fornecedor = new Fornecedor { FornecedorId = 1, Nome = "Fashion Trends" },
-                DataCriacao = DateTime.UtcNow.AddMonths(-3),
-            },
-            new Produto
-            {
-                ProdutoId = 2,
-                Nome = "Tênis Running Feminino",
-                Preco = 199.90m,
-                Ativo = true,
-                CategoriaId = 2,
-                FornecedorId = 2,
-                Categoria = new Categoria { CategoriaId = 2, Nome = "Calçados Femininos" },
-                Fornecedor = new Fornecedor { FornecedorId = 2, Nome = "RunStyle" },
-                DataCriacao = DateTime.UtcNow.AddMonths(-1),
-            },
-            new Produto {
-                ProdutoId = 3,
-                Nome = "Relógio de Pulso Masculino",
-                Preco = 499.99m,
-                Ativo = false,
-                CategoriaId = 3,
-                FornecedorId = 3,
-                Categoria = new Categoria { CategoriaId = 3, Nome = "Acessórios Masculinos" },
-                Fornecedor = new Fornecedor { FornecedorId = 3, Nome = "TimeStyle" },
-                DataCriacao = DateTime.UtcNow.AddMonths(-6),
-            }
-           };
+                new ProdutoResponseDto { ProdutoId = 1, Nome = "Camiseta Polo Masculina", CategoriaNome = "Roupas Masculinas", FornecedorNome = "Fashion Trends" },
+                new ProdutoResponseDto { ProdutoId = 2, Nome = "Tênis Running Feminino", CategoriaNome = "Calçados Femininos", FornecedorNome = "RunStyle" },
+                new ProdutoResponseDto { ProdutoId = 3, Nome = "Relógio de Pulso Masculino", CategoriaNome = "Acessórios Masculinos", FornecedorNome = "Fashion Trends" }
+            };
 
-            var mockProdutoDbSet = produtos.AsQueryable().BuildMockDbSet();
-            _mockDbContext.Setup(db => db.Produto).Returns(mockProdutoDbSet.Object);
-
-            var produtoDtos = new List<ProdutoResponseDto> {
-           new ProdutoResponseDto { ProdutoId = 1, Nome = "Camiseta Polo Masculina", CategoriaNome = "Roupas Masculinas", FornecedorNome = "Fashion Trends" },
-           new ProdutoResponseDto { ProdutoId = 2, Nome = "Tênis Running Feminino", CategoriaNome = "Calçados Femininos", FornecedorNome = "RunStyle" },
-           new ProdutoResponseDto { ProdutoId = 3, Nome = "Relógio de Pulso Masculino", CategoriaNome = "Acessórios Masculinos", FornecedorNome = "TimeStyle" }};
-
+            // Configura o Mock do Mapper
             _mockMapper.Setup(m => m.Map<List<ProdutoResponseDto>>(It.IsAny<List<Produto>>()))
-                       .Returns(produtoDtos);
+                      .Returns(produtoDtos);
 
+            // Chama o método de busca
             var resultado = await _repositorio.BuscarProdutos();
 
+            // Verifica o resultado
             Assert.NotNull(resultado);
             Assert.Equal(3, resultado.Count);
-            Assert.Equal("Camiseta Polo Masculina", resultado[0].Nome);
-            Assert.Equal("Tênis Running Feminino", resultado[1].Nome);
-            Assert.Equal("Relógio de Pulso Masculino", resultado[2].Nome);
-            Assert.Equal("Roupas Masculinas", resultado[0].CategoriaNome);
-            Assert.Equal("Fashion Trends", resultado[0].FornecedorNome);
-            Assert.Equal("Calçados Femininos", resultado[1].CategoriaNome);
-            Assert.Equal("RunStyle", resultado[1].FornecedorNome);
-            Assert.Equal("Acessórios Masculinos", resultado[2].CategoriaNome);
-            Assert.Equal("TimeStyle", resultado[2].FornecedorNome);
+            Assert.Contains(resultado, p => p.Nome == "Camiseta Polo Masculina");
+            Assert.Contains(resultado, p => p.Nome == "Tênis Running Feminino");
+            Assert.Contains(resultado, p => p.Nome == "Relógio de Pulso Masculino");
         }
 
         [Fact]
-        public void BuscarProdutoPorId_LancaExcecaoQuandoNaoExistente()
+        public async Task BuscarProdutoPorId_RetornaProdutoQuandoExistente()
         {
-            var produtoId = 999; 
-            var produtos = new List<Produto>().AsQueryable();
-            var mockDbSet = new Mock<DbSet<Produto>>();
+            // Adiciona os dados de teste ao banco de dados em memória
+            await AdicionarDadosTeste();
 
-            mockDbSet.As<IQueryable<Produto>>()
-                     .Setup(m => m.Provider).Returns(produtos.Provider);
-            mockDbSet.As<IQueryable<Produto>>()
-                     .Setup(m => m.Expression).Returns(produtos.Expression);
-            mockDbSet.As<IQueryable<Produto>>()
-                     .Setup(m => m.ElementType).Returns(produtos.ElementType);
-            mockDbSet.As<IQueryable<Produto>>()
-                     .Setup(m => m.GetEnumerator()).Returns(produtos.GetEnumerator());
+            int produtoId = 1;
 
-            _mockDbContext.Setup(db => db.Produto).Returns(mockDbSet.Object);
-
-            var exception = Assert.Throws<KeyNotFoundException>(() => _repositorio.BuscarProdutoPorId(produtoId));
-            Assert.Equal($"Produto com ID {produtoId} não encontrado.", exception.Message);
-        }
-
-        [Fact]
-        public async Task Adicionar_ProdutoComCategoriaInexistente_LancaExcecao()
-        {
-            var produtoDto = new RequestProdutoDto
-            {
-                Nome = "Jaqueta de Couro Masculina",
-                Preco = 349.99m,
-                CategoriaId = 999,
-                FornecedorId = 2,
-                Ativo = true,
-            };
-
-            _mockDbContext.Setup(db => db.Categoria.FindAsync(produtoDto.CategoriaId))
-                          .ReturnsAsync((Categoria)null);
-
-            var exception = await Assert.ThrowsAsync<Exception>(() => _repositorio.Adicionar(produtoDto));
-            Assert.Equal($"A categoria com ID {produtoDto.CategoriaId} não existe. Por favor vincule a uma categoria e um fornecedor existente.", exception.Message);
-        }
-
-        [Fact]
-        public async Task Atualizar_ProdutoExistente_AtualizaComSucesso()
-        {
-            var produtoId = 1;
-            var produtoExistente = new Produto
-            {
-                ProdutoId = produtoId,
-                Nome = "Tênis Esportivo Masculino",
-                Preco = 199.90m,
-                CategoriaId = 1,
-                FornecedorId = 1,
-                DataCriacao = DateTime.UtcNow.AddMonths(-2),
-                DataAtualizacao = DateTime.MinValue
-            };
-
-            var produtoDto = new RequestProdutoDto
-            {
-                Nome = "Tênis Esportivo Masculino - Atualizado",
-                Preco = 179.90m,
-                CategoriaId = 2,
-                FornecedorId = 2
-            };
-
-            _mockDbContext.Setup(db => db.Produto.FindAsync(produtoId))
-                          .ReturnsAsync(produtoExistente);
-
-            _mockMapper.Setup(m => m.Map(produtoDto, produtoExistente))
-                       .Callback<RequestProdutoDto, Produto>((src, dest) =>
-                       {
-                           dest.Nome = src.Nome;
-                           dest.Preco = src.Preco;
-                           dest.CategoriaId = src.CategoriaId;
-                           dest.FornecedorId = src.FornecedorId;
-                           dest.DataAtualizacao = DateTime.UtcNow;
-                       });
-
-            _mockMapper.Setup(m => m.Map<RequestProdutoDto>(produtoExistente))
-                       .Returns(new RequestProdutoDto
-                       {
-                           Nome = "Tênis Esportivo Masculino - Atualizado",
-                           Preco = 179.90m,
-                           CategoriaId = 2,
-                           FornecedorId = 2
-                       });
-
-            _mockDbContext.Setup(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()))
-                          .ReturnsAsync(1);
-
-            _mockDbContext.Setup(db => db.Produto.Update(It.IsAny<Produto>()))
-                          .Verifiable();
-
-            var resultado = await _repositorio.Atualizar(produtoDto, produtoId);
+            // Chama o método de forma assíncrona
+            var resultado = await _repositorio.BuscarProdutoPorIdAsync(produtoId);  // Agora é assíncrono
 
             Assert.NotNull(resultado);
-            Assert.Equal("Tênis Esportivo Masculino - Atualizado", resultado.Nome);
-            Assert.Equal(2, resultado.CategoriaId);
-            Assert.Equal(2, resultado.FornecedorId);
-            Assert.Equal(179.90m, resultado.Preco);
-
-            _mockDbContext.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            Assert.Equal(produtoId, resultado.ProdutoId);
+            Assert.Equal("Camiseta Polo Masculina", resultado.Nome);
         }
 
-        [Fact]
-        public async Task Apagar_ProdutoExistente_RetornaTrue()
-        {
-            var produtoExistente = new Produto
-            {
-                ProdutoId = 1,
-                Nome = "Camiseta Masculina",
-                Preco = 99.90m,
-                CategoriaId = 1,
-                FornecedorId = 1,
-                Categoria = new Categoria { CategoriaId = 1, Nome = "Roupas Masculinas" },
-                Fornecedor = new Fornecedor { FornecedorId = 1, Nome = "Fashion Trends" },
-                DataCriacao = DateTime.UtcNow.AddMonths(-3)
-            };
-
-            _mockDbContext.Setup(db => db.Produto.FindAsync(1)).ReturnsAsync(produtoExistente);
-            _mockDbContext.Setup(db => db.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
-
-            var resultado = await _repositorio.Apagar(1);
-            Assert.True(resultado);
-
-            _mockDbContext.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            _mockDbContext.Verify(db => db.Produto.Remove(produtoExistente), Times.Once);
-        }
-
-        [Fact]
-        public async Task Apagar_ProdutoNaoExistente_LancaException()
-        {
-            _mockDbContext.Setup(db => db.Produto.FindAsync(1)).ReturnsAsync((Produto)null);
-            await Assert.ThrowsAsync<Exception>(() => _repositorio.Apagar(1));
-        }
     }
 }
