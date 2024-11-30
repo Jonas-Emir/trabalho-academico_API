@@ -1,17 +1,37 @@
-namespace MonitoraEstoqueServico
+using Microsoft.Extensions.DependencyInjection;
+using MonitoraEstoqueServico.Services;
+using MonitoraEstoqueServico;
+using ServiceMonitor.Services;
+
+namespace ServiceMonitor
 {
     internal static class Program
     {
+        private static ServiceProvider _serviceProvider;
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+
+            var mainForm = _serviceProvider.GetRequiredService<MainForm>();
+            Application.Run(mainForm);
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<ConfiguracaoService>();
+            services.AddSingleton<MonitoramentoService>();
+            services.AddHttpClient<ApiService>();
+            services.AddSingleton<MainForm>();
         }
     }
 }

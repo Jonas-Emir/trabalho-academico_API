@@ -1,13 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using MonitoraEstoqueServico.Dtos;
+using System.Timers;
 
-namespace MonitoraEstoqueServico.Services
+namespace ServiceMonitor.Services
 {
     public class MonitoramentoService
     {
+        private readonly ApiService _apiService;
+
+        public MonitoramentoService(ApiService apiService)
+        {
+            _apiService = apiService;
+        }
+
+        public async void ExecutarServico(object sender, ElapsedEventArgs e)
+        {
+
+            RegistrarLog("--- Serviço iniciado ---");
+
+            try
+            {
+                var apiService = new ApiService(new HttpClient());
+
+                var produtos = await apiService.ListarProdutosAsync();
+
+                RegistrarQuantidadeTotalProdutos(produtos);
+
+                await VerificarBaixaQuantidade(produtos);
+                //await VerificarProdutosProximosDaValidade(produtos);
+                RegistrarLog("Verificação concluida com sucesso!");
+                RegistrarLog("");
+
+            }
+            catch (Exception ex)
+            {
+                RegistrarLog($"Erro ao executar serviço: {ex.Message}");
+            }
+        }
+        private void RegistrarQuantidadeTotalProdutos(List<ProdutoResponseDto> produtos)
+        {
+            var totalProdutos = produtos.Count;
+            RegistrarLog($"Total de produtos no estoque: {totalProdutos}");
+        }
+
+        private async Task VerificarBaixaQuantidade(List<ProdutoResponseDto> produtos)
+        {
+            var produtosBaixaQuantidade = produtos.Where(p => p.QuantidadeEstoque < 5).ToList();
+            if (produtosBaixaQuantidade.Any())
+            {
+                foreach (var produto in produtosBaixaQuantidade)
+                {
+                    RegistrarLog($"Atenção: Produto '{produto.Nome}' está com baixa quantidade: {produto.QuantidadeEstoque}");
+                    await EnviarEmailAsync("Alerta de Baixa Quantidade", $"Produto '{produto.Nome}' está com apenas {produto.QuantidadeEstoque} unidades no estoque.");
+                }
+            }
+        }
+
+        //private async Task VerificarProdutosProximosDaValidade(List<ProdutoResponseDto> produtos)
+        //{
+        //    var produtosProximosValidade = produtos.Where(p => p.DataValidade <= DateTime.Now.AddDays(30)).ToList();
+        //    if (produtosProximosValidade.Any())
+        //    {
+        //        foreach (var produto in produtosProximosValidade)
+        //        {
+        //            RegistrarLog($"Atenção: Produto '{produto.Nome}' está próximo da validade: {produto.DataValidade.ToShortDateString()}");
+        //            // Enviar e-mail de alerta sobre validade
+        //            await EnviarEmailAsync("Alerta de Validade", $"Produto '{produto.Nome}' está próximo da validade em {produto.DataValidade.ToShortDateString()}.");
+        //        }
+        //    }
+        //}
+
+        private async Task EnviarEmailAsync(string assunto, string corpo)
+        {
+            await Task.Run(() =>
+            {
+                RegistrarLog($"E-mail enviado: {assunto} - {corpo}");
+            });
+        }
+
         public string CriarPastaLogs()
         {
             string nomePastaLogs = "Logs";

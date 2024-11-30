@@ -47,6 +47,7 @@
             label7 = new Label();
             label8 = new Label();
             label9 = new Label();
+            txtStatusServico = new TextBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -67,6 +68,7 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(txtStatusServico);
             tabPage1.Controls.Add(button3);
             tabPage1.Controls.Add(button2);
             tabPage1.Controls.Add(button1);
@@ -110,7 +112,7 @@
             // 
             labelMonitoramento.AutoSize = true;
             labelMonitoramento.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelMonitoramento.Location = new Point(104, 12);
+            labelMonitoramento.Location = new Point(105, 3);
             labelMonitoramento.Name = "labelMonitoramento";
             labelMonitoramento.Size = new Size(154, 25);
             labelMonitoramento.TabIndex = 0;
@@ -175,6 +177,7 @@
             // 
             // strFormatoIntervalo
             // 
+            strFormatoIntervalo.DropDownStyle = ComboBoxStyle.DropDownList;
             strFormatoIntervalo.FormattingEnabled = true;
             strFormatoIntervalo.Items.AddRange(new object[] { "Segundos", "Minutos", "Horas" });
             strFormatoIntervalo.Location = new Point(247, 53);
@@ -242,6 +245,14 @@
             label9.TabIndex = 13;
             label9.Text = "Configurações Gerais";
             // 
+            // txtStatusServico
+            // 
+            txtStatusServico.BorderStyle = BorderStyle.None;
+            txtStatusServico.Location = new Point(114, 31);
+            txtStatusServico.Name = "txtStatusServico";
+            txtStatusServico.Size = new Size(130, 16);
+            txtStatusServico.TabIndex = 4;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -288,5 +299,6 @@
         private NumericUpDown numericUpDown4;
         private NumericUpDown numericUpDown3;
         private NumericUpDown nrIntervalo;
+        private TextBox txtStatusServico;
     }
 }

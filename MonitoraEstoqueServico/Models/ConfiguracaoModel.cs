@@ -3,7 +3,7 @@ namespace MonitoraEstoqueServico.Models
 {
     public class ConfiguracaoModel
     {
-        public int IntervaloExecucoes { get; set; }
+        public TimeSpan IntervaloExecucoes { get; set; }
         public string? StrFormatoIntervalo { get; set; }
         public string? EmailNotificacao { get; set; }
         public int QuantidadeEstoqueAlto { get; set; }
