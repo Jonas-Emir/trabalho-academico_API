@@ -35,13 +35,13 @@
             button1 = new Button();
             labelMonitoramento = new Label();
             tabPage2 = new TabPage();
+            nrIntervalo = new NumericUpDown();
             lnkLogs = new LinkLabel();
             btnSalvar = new Button();
             txtNotificaEmail = new TextBox();
             strFormatoIntervalo = new ComboBox();
-            numericUpDown1 = new NumericUpDown();
-            numericUpDown2 = new NumericUpDown();
-            nrTentativas = new NumericUpDown();
+            nrEstoqueBaixo = new NumericUpDown();
+            nrEstoqueAlto = new NumericUpDown();
             label5 = new Label();
             label6 = new Label();
             label7 = new Label();
@@ -50,9 +50,9 @@
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)nrTentativas).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nrIntervalo).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nrEstoqueBaixo).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nrEstoqueAlto).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -118,13 +118,13 @@
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(nrIntervalo);
             tabPage2.Controls.Add(lnkLogs);
             tabPage2.Controls.Add(btnSalvar);
             tabPage2.Controls.Add(txtNotificaEmail);
             tabPage2.Controls.Add(strFormatoIntervalo);
-            tabPage2.Controls.Add(numericUpDown1);
-            tabPage2.Controls.Add(numericUpDown2);
-            tabPage2.Controls.Add(nrTentativas);
+            tabPage2.Controls.Add(nrEstoqueBaixo);
+            tabPage2.Controls.Add(nrEstoqueAlto);
             tabPage2.Controls.Add(label5);
             tabPage2.Controls.Add(label6);
             tabPage2.Controls.Add(label7);
@@ -138,6 +138,13 @@
             tabPage2.Text = "Configurações";
             tabPage2.UseVisualStyleBackColor = true;
             // 
+            // nrIntervalo
+            // 
+            nrIntervalo.Location = new Point(199, 53);
+            nrIntervalo.Name = "nrIntervalo";
+            nrIntervalo.Size = new Size(42, 23);
+            nrIntervalo.TabIndex = 25;
+            // 
             // lnkLogs
             // 
             lnkLogs.AutoSize = true;
@@ -147,6 +154,7 @@
             lnkLogs.TabIndex = 24;
             lnkLogs.TabStop = true;
             lnkLogs.Text = "Controle de Logs";
+            lnkLogs.LinkClicked += lnkLogs_LinkClicked;
             // 
             // btnSalvar
             // 
@@ -156,6 +164,7 @@
             btnSalvar.TabIndex = 23;
             btnSalvar.Text = "Salvar";
             btnSalvar.UseVisualStyleBackColor = true;
+            btnSalvar.Click += btnSalvar_Click;
             // 
             // txtNotificaEmail
             // 
@@ -173,26 +182,19 @@
             strFormatoIntervalo.Size = new Size(79, 23);
             strFormatoIntervalo.TabIndex = 21;
             // 
-            // numericUpDown1
+            // nrEstoqueBaixo
             // 
-            numericUpDown1.Location = new Point(201, 140);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(40, 23);
-            numericUpDown1.TabIndex = 20;
+            nrEstoqueBaixo.Location = new Point(201, 140);
+            nrEstoqueBaixo.Name = "nrEstoqueBaixo";
+            nrEstoqueBaixo.Size = new Size(40, 23);
+            nrEstoqueBaixo.TabIndex = 20;
             // 
-            // numericUpDown2
+            // nrEstoqueAlto
             // 
-            numericUpDown2.Location = new Point(201, 111);
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(40, 23);
-            numericUpDown2.TabIndex = 19;
-            // 
-            // nrTentativas
-            // 
-            nrTentativas.Location = new Point(201, 54);
-            nrTentativas.Name = "nrTentativas";
-            nrTentativas.Size = new Size(40, 23);
-            nrTentativas.TabIndex = 18;
+            nrEstoqueAlto.Location = new Point(201, 111);
+            nrEstoqueAlto.Name = "nrEstoqueAlto";
+            nrEstoqueAlto.Size = new Size(40, 23);
+            nrEstoqueAlto.TabIndex = 19;
             // 
             // label5
             // 
@@ -253,9 +255,9 @@
             tabPage1.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)nrTentativas).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nrIntervalo).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nrEstoqueBaixo).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nrEstoqueAlto).EndInit();
             ResumeLayout(false);
         }
 
@@ -272,9 +274,8 @@
         private Button btnSalvar;
         private TextBox txtNotificaEmail;
         private ComboBox strFormatoIntervalo;
-        private NumericUpDown numericUpDown1;
-        private NumericUpDown numericUpDown2;
-        private NumericUpDown nrTentativas;
+        private NumericUpDown nrEstoqueBaixo;
+        private NumericUpDown nrEstoqueAlto;
         private Label label5;
         private Label label6;
         private Label label7;
