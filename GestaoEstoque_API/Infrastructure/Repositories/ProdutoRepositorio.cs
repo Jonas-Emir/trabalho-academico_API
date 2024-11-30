@@ -64,7 +64,7 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
             if (produtoColetado == null)
                 throw new Exception($"Produto para o ID: {produtoId} não foi encontrado no banco de dados, atualização não realizada.");
 
-            _mapper.Map(produtoDto, produtoColetado); 
+            _mapper.Map(produtoDto, produtoColetado);
             produtoColetado.DataAtualizacao = DateTime.Now;
 
             _dbContext.Produto.Update(produtoColetado);
