@@ -34,7 +34,7 @@ namespace API_SistemaDeAtividades.Controllers
         {
             try
             {
-                var produto = _produtoRepositorio.BuscarProdutoPorId(id);
+                var produto = await _produtoRepositorio.BuscarProdutoPorIdAsync(id);
 
                 if (produto == null)
                     return NotFound($"Produto com ID {id} não encontrado.");
@@ -66,7 +66,7 @@ namespace API_SistemaDeAtividades.Controllers
         {
             try
             {
-                var produtoExistente = _produtoRepositorio.BuscarProdutoPorId(id);
+                var produtoExistente = await _produtoRepositorio.BuscarProdutoPorIdAsync(id);
 
                 if (produtoExistente == null)
                     return NotFound($"Produto com ID {id} não encontrado.");

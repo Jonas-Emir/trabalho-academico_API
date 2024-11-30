@@ -34,14 +34,20 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
         public async Task<FornecedorRequestDto> AdicionarAsync(FornecedorRequestDto fornecedorDto)
         {
-            var fornecedorExistente = await VerificarFornecedorExistente(fornecedorDto.CNPJ);
-            if (fornecedorExistente)
-                throw new Exception($"Já existe um fornecedor cadastrado com o CNPJ '{fornecedorDto.CNPJ}'.");
-
             var fornecedor = _mapper.Map<Fornecedor>(fornecedorDto);
-            await _dbContext.Fornecedor.AddAsync(fornecedor);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                var fornecedorExistente = await VerificarFornecedorExistente(fornecedorDto.CNPJ);
+                if (fornecedorExistente)
+                    throw new Exception($"Já existe um fornecedor cadastrado com o CNPJ '{fornecedorDto.CNPJ}'.");
 
+                await _dbContext.Fornecedor.AddAsync(fornecedor);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+            }
             return _mapper.Map<FornecedorRequestDto>(fornecedor);
         }
 

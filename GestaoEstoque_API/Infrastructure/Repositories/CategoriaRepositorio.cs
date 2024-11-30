@@ -39,14 +39,21 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
         public async Task<CategoriaRequestDto> Adicionar(CategoriaRequestDto categoriaDto)
         {
-            var categoriaExistente = await VerificarCategoriaExistente(categoriaDto.Nome);
-            if (categoriaExistente)
-                throw new Exception($"A categoria com o nome '{categoriaDto.Nome}' já está cadastrada.");
-
             var categoria = _mapper.Map<Categoria>(categoriaDto);
-            await _dbContext.Categoria.AddAsync(categoria);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                var categoriaExistente = await VerificarCategoriaExistente(categoriaDto.Nome);
+                if (categoriaExistente)
+                    throw new Exception($"A categoria com o nome '{categoriaDto.Nome}' já está cadastrada.");
 
+                await _dbContext.Categoria.AddAsync(categoria);
+                await _dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
             return _mapper.Map<CategoriaRequestDto>(categoria);
         }
 

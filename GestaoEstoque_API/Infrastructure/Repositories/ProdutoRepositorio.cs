@@ -27,12 +27,12 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
             return _mapper.Map<List<ProdutoResponseDto>>(produtos);
         }
 
-        public ProdutoResponseDto BuscarProdutoPorId(int produtoId)
+        public async Task<ProdutoResponseDto> BuscarProdutoPorIdAsync(int produtoId)
         {
-            var produto =  _dbContext.Produto
+            var produto = await _dbContext.Produto
                 .Include(x => x.Categoria)
                 .Include(x => x.Fornecedor)
-                .FirstOrDefault(x => x.ProdutoId == produtoId);
+                .FirstOrDefaultAsync(x => x.ProdutoId == produtoId);
 
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com ID {produtoId} não encontrado.");
@@ -64,7 +64,7 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
             if (produtoColetado == null)
                 throw new Exception($"Produto para o ID: {produtoId} não foi encontrado no banco de dados, atualização não realizada.");
 
-            _mapper.Map(produtoDto, produtoColetado); 
+            _mapper.Map(produtoDto, produtoColetado);
             produtoColetado.DataAtualizacao = DateTime.Now;
 
             _dbContext.Produto.Update(produtoColetado);
