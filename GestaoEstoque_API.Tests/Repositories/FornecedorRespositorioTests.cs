@@ -92,7 +92,7 @@ namespace GestaoEstoque_API.Tests.Repositories
         }
 
         [Fact]
-        public async Task AdicionarAsync_DeveAdicionarFornecedor()
+        public async Task Adicionar_DeveAdicionarFornecedor()
         {
             FornecedorRequestDto fornecedorRequest = new FornecedorRequestDto
             {
@@ -113,7 +113,7 @@ namespace GestaoEstoque_API.Tests.Repositories
         }
 
         [Fact]
-        public async Task AtualizarAsync_DeveAtualizarFornecedor()
+        public async Task Atualizar_DeveAtualizarFornecedor()
         {
             SeedDatabase();
             var fornecedorRequest = new FornecedorRequestDto
