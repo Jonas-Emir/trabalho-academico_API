@@ -2,6 +2,8 @@
 using MonitoraEstoqueServico.Dtos;
 using MonitoraEstoqueServico.Models;
 using MonitoraEstoqueServico.Services;
+using System.Net.Mail;
+using System.Net;
 using System.Text.Json;
 using System.Timers;
 
@@ -45,7 +47,7 @@ namespace ServiceMonitor.Services
             var corpoEmail = MontarCorpoEmail(produtosBaixaQuantidade, produtosAltaQuantidade);
 
             if (!string.IsNullOrEmpty(corpoEmail))
-                await EnviarEmailAsync("Relatório de Quantidades no Estoque", corpoEmail);
+                await EnviarEmailAsync("Relatório de Quantidades no Estoque", corpoEmail, configuracoesBaseEstoque.EmailNotificacao);
         }
 
         private string MontarCorpoEmail(List<ProdutoResponseDto> produtosBaixa, List<ProdutoResponseDto> produtosAlta)
@@ -69,20 +71,43 @@ namespace ServiceMonitor.Services
                 {
                     builder.AppendLine($"- {produto.Nome}: {produto.QuantidadeEstoque} unidades");
                 }
-                builder.AppendLine();
             }
 
             return builder.ToString();
         }
 
-        private async Task EnviarEmailAsync(string assunto, string mensagem)
+        public async Task EnviarEmailAsync(string assunto, string mensagem, string destinatarioEmail)
         {
             try
             {
-                // Implementação do envio de email faltante, falta realizar o método para fazer o envio de email passando o assunto e a mensagem
+                string servidorSMTP = "smtp.gmail.com";
+                int portaSMTP = 587;
+                string emailDeEnvio = "";
+                string senhaDeEnvio = ""; 
+                SmtpClient clienteSMTP = new SmtpClient()
+                {
+                    Port = portaSMTP,
+                    Host = servidorSMTP,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(emailDeEnvio, senhaDeEnvio),
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network
 
-                string mensagemLog = mensagem.Length > 1000 ? mensagem.Substring(0, 1000) + "..." : mensagem;
-                RegistrarLog($"Email enviado com sucesso: Assunto: '{assunto}', Mensagem: '{mensagemLog}'");
+                };
+
+                MailMessage mensagemEmail = new MailMessage
+                {
+                    From = new MailAddress(emailDeEnvio),
+                    Subject = assunto,
+                    Body = mensagem,
+                    IsBodyHtml = false,
+                    Priority = MailPriority.Normal
+                };
+
+                mensagemEmail.To.Add(destinatarioEmail);
+                await clienteSMTP.SendMailAsync(mensagemEmail);
+
+                RegistrarLog($"Email enviado com sucesso: Assunto: '{assunto}', Mensagem: '{mensagem}'");
             }
             catch (Exception ex)
             {
