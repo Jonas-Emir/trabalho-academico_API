@@ -30,9 +30,10 @@
         {
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            button3 = new Button();
-            button2 = new Button();
-            button1 = new Button();
+            btnReiniciar = new Button();
+            btnIniciar = new Button();
+            btnParar = new Button();
+            txtStatusServico = new TextBox();
             labelMonitoramento = new Label();
             tabPage2 = new TabPage();
             nrIntervalo = new NumericUpDown();
@@ -47,7 +48,6 @@
             label7 = new Label();
             label8 = new Label();
             label9 = new Label();
-            txtStatusServico = new TextBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -68,10 +68,10 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(btnReiniciar);
+            tabPage1.Controls.Add(btnIniciar);
+            tabPage1.Controls.Add(btnParar);
             tabPage1.Controls.Add(txtStatusServico);
-            tabPage1.Controls.Add(button3);
-            tabPage1.Controls.Add(button2);
-            tabPage1.Controls.Add(button1);
             tabPage1.Controls.Add(labelMonitoramento);
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
@@ -81,38 +81,50 @@
             tabPage1.Text = "Monitoramento";
             tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnReiniciar
             // 
-            button3.Location = new Point(85, 164);
-            button3.Name = "button3";
-            button3.Size = new Size(183, 36);
-            button3.TabIndex = 3;
-            button3.Text = "Reiniciar";
-            button3.UseVisualStyleBackColor = true;
+            btnReiniciar.Location = new Point(83, 118);
+            btnReiniciar.Name = "btnReiniciar";
+            btnReiniciar.Size = new Size(192, 35);
+            btnReiniciar.TabIndex = 7;
+            btnReiniciar.Text = "Reiniciar Serviço";
+            btnReiniciar.UseVisualStyleBackColor = true;
+            btnReiniciar.Click += btnReiniciar_Click;
             // 
-            // button2
+            // btnIniciar
             // 
-            button2.Location = new Point(85, 112);
-            button2.Name = "button2";
-            button2.Size = new Size(183, 36);
-            button2.TabIndex = 2;
-            button2.Text = "Parar";
-            button2.UseVisualStyleBackColor = true;
+            btnIniciar.Location = new Point(83, 74);
+            btnIniciar.Name = "btnIniciar";
+            btnIniciar.Size = new Size(192, 38);
+            btnIniciar.TabIndex = 6;
+            btnIniciar.Text = "Iniciar Monitoramento";
+            btnIniciar.UseVisualStyleBackColor = true;
+            btnIniciar.Click += btnIniciar_Click;
             // 
-            // button1
+            // btnParar
             // 
-            button1.Location = new Point(85, 57);
-            button1.Name = "button1";
-            button1.Size = new Size(183, 36);
-            button1.TabIndex = 1;
-            button1.Text = "Inicializar";
-            button1.UseVisualStyleBackColor = true;
+            btnParar.Location = new Point(83, 159);
+            btnParar.Name = "btnParar";
+            btnParar.Size = new Size(192, 37);
+            btnParar.TabIndex = 5;
+            btnParar.Text = "Parar Monitoramento";
+            btnParar.UseVisualStyleBackColor = true;
+            btnParar.Click += btnParar_Click;
+            // 
+            // txtStatusServico
+            // 
+            txtStatusServico.BorderStyle = BorderStyle.None;
+            txtStatusServico.Location = new Point(117, 42);
+            txtStatusServico.Name = "txtStatusServico";
+            txtStatusServico.Size = new Size(130, 16);
+            txtStatusServico.TabIndex = 4;
+            txtStatusServico.TextAlign = HorizontalAlignment.Center;
             // 
             // labelMonitoramento
             // 
             labelMonitoramento.AutoSize = true;
             labelMonitoramento.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelMonitoramento.Location = new Point(105, 3);
+            labelMonitoramento.Location = new Point(105, 11);
             labelMonitoramento.Name = "labelMonitoramento";
             labelMonitoramento.Size = new Size(154, 25);
             labelMonitoramento.TabIndex = 0;
@@ -245,14 +257,6 @@
             label9.TabIndex = 13;
             label9.Text = "Configurações Gerais";
             // 
-            // txtStatusServico
-            // 
-            txtStatusServico.BorderStyle = BorderStyle.None;
-            txtStatusServico.Location = new Point(114, 31);
-            txtStatusServico.Name = "txtStatusServico";
-            txtStatusServico.Size = new Size(130, 16);
-            txtStatusServico.TabIndex = 4;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -292,13 +296,13 @@
         private Label label7;
         private Label label8;
         private Label label9;
-        private Button button1;
-        private Button button3;
-        private Button button2;
         private Label label4;
         private NumericUpDown numericUpDown4;
         private NumericUpDown numericUpDown3;
         private NumericUpDown nrIntervalo;
         private TextBox txtStatusServico;
+        private Button btnIniciar;
+        private Button btnParar;
+        private Button btnReiniciar;
     }
 }

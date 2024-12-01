@@ -8,6 +8,7 @@ namespace GestaoEstoque_API.Infrastructure.Repositories.Interface
         Task<EstoqueResponseDto> BuscarPorId(int estoqueId);
         Task<ProdutoEstoqueResponseDto> BuscarQuantidadeEstoquePorProduto(int produtoId);
         Task<Dictionary<string, int>> BuscarQuantidadePorTipoMovimento(int produtoId);
+        Task<List<ProdutoQuantidadeDto>> BuscarQuantidadeTotalDeCadaProduto();
         Task<EstoqueResponseDto> VerificarSeProdutoExisteAsync(int produtoId);
         Task<EstoqueRequestDto> Adicionar(EstoqueRequestDto estoqueDto);
         Task<EstoqueRequestDto> Atualizar(EstoqueRequestDto produtoDto, int estoqueId);

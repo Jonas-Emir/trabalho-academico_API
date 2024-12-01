@@ -45,9 +45,6 @@ namespace MonitoraEstoqueServico
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
-            string logMsg = "SALVANDO TESTE";
-            _monitoramentoService.RegistrarLog(logMsg);
-
             TimeSpan intervaloExecucoes = _configuracaoService.ObterIntervalo((int)nrIntervalo.Value, strFormatoIntervalo.Text);
 
             var configuracao = new ConfiguracaoModel
@@ -76,6 +73,9 @@ namespace MonitoraEstoqueServico
                 _timer.Stop();
                 _timer.Dispose();
                 _timer = null;
+                _monitoramentoService.RegistrarLog($"");
+                _monitoramentoService.RegistrarLog($"--- Serviço Parado ---");
+                _monitoramentoService.RegistrarLog($"");
             }
         }
 
@@ -97,12 +97,17 @@ namespace MonitoraEstoqueServico
             {
                 ConfigurarTimer();
 
+                _monitoramentoService.ExecutarServico(null, null);
+
                 _timer.Elapsed += _monitoramentoService.ExecutarServico;
                 _timer.AutoReset = true;
                 _timer?.Start();
 
+                _monitoramentoService.RegistrarLog($"");
+                _monitoramentoService.RegistrarLog("--- Serviço iniciado ---");
                 _monitoramentoService.RegistrarLog($"Serviço iniciado com o intervalo configurado de {_configuracao.IntervaloExecucoes.TotalMinutes} minutos.");
                 StatusServico("Serviço iniciado", Color.Green);
+
             }
             else
             {

@@ -15,10 +15,9 @@ namespace MonitoraEstoqueServico.Dtos
         [JsonPropertyName("nome")]
         public string Nome { get; set; }
 
-        [JsonPropertyName("preco")]
         public decimal Preco { get; set; }
 
-        [JsonPropertyName("quantidadeEstoque")]
+        [JsonPropertyName("quantidadeTotal")]
         public decimal QuantidadeEstoque { get; set; }
 
     }

@@ -6,6 +6,8 @@ namespace ServiceMonitor.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
+        private readonly MonitoramentoService _monitoramentoService;
+        private HttpClient httpClient;
 
         public ApiService(HttpClient httpClient)
         {
@@ -13,18 +15,29 @@ namespace ServiceMonitor.Services
             _httpClient.BaseAddress = new Uri("https://localhost:7108");
         }
 
-        public async Task<List<ProdutoResponseDto>> ListarProdutosAsync()
+        public async Task<List<ProdutoResponseDto>> ListarQuantidadeTotalPorProduto()
         {
-            var response = await _httpClient.GetAsync("/api/produto/listarprodutos");
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/estoque/BuscarQuantidadeTotalEstoque");
 
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<ProdutoResponseDto>>(json);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<List<ProdutoResponseDto>>(json);
+                }
+                else
+                {
+                    var errorMessage = $"Erro ao listar produtos. Status: {response.StatusCode}, Motivo: {response.ReasonPhrase}";
+                    _monitoramentoService.RegistrarLog(errorMessage);
+                    throw new Exception(errorMessage);
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                throw new Exception($"Erro ao listar produtos: {response.ReasonPhrase}");
+                MonitoramentoService monitoramentoService = new MonitoramentoService();
+                var errorMessage = $"Conexão com a API -> {ex.Message}";
+                throw new Exception(errorMessage, ex);
             }
         }
     }

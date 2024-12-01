@@ -47,6 +47,20 @@ namespace GestaoEstoque_API.Controllers
             }
         }
 
+        [HttpGet("BuscarQuantidadeTotalEstoque")]
+        public async Task<IActionResult> BuscarQuantidadeTotalDeCadaProduto()
+        {
+            try
+            {
+                var quantidadePorProduto = await _estoqueRepositorio.BuscarQuantidadeTotalDeCadaProduto();
+                return Ok(quantidadePorProduto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensagem = ex.Message });
+            }
+        }
+
         [HttpGet("BuscarQuantidadeEstoquePorProduto/{produtoId:int}")]
         public async Task<IActionResult> BuscarQuantidadeEstoquePorProduto(int produtoId)
         {
