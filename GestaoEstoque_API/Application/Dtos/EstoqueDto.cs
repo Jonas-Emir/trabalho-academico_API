@@ -32,4 +32,11 @@ namespace GestaoEstoque_API.Application.Dtos
         public string ProdutoNome { get; set; }
         public Dictionary<string, int> QuantidadePorTipoMovimento { get; set; }
     }
+
+    public class ProdutoQuantidadeDto
+    {
+        public int ProdutoId { get; set; }
+        public string Nome { get; set; }
+        public int QuantidadeTotal { get; set; }
+    }
 }

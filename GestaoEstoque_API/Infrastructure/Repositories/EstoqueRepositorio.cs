@@ -41,12 +41,12 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
         public async Task<EstoqueRequestDto> Adicionar(EstoqueRequestDto estoqueDto)
         {
-           var produto = await VerificarSeProdutoExisteAsync(estoqueDto.ProdutoId);
+            var produto = await VerificarSeProdutoExisteAsync(estoqueDto.ProdutoId);
             var estoque = new Estoque
             {
                 ProdutoId = estoqueDto.ProdutoId,
                 Quantidade = estoqueDto.Quantidade,
-                Id_Tipo_Movimento = estoqueDto.TipoMovimentoId 
+                Id_Tipo_Movimento = estoqueDto.TipoMovimentoId
             };
 
             await _dbContext.Estoque.AddAsync(estoque);
@@ -83,6 +83,32 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
         }
 
         #region Métodos auxiliares
+        public async Task<List<ProdutoQuantidadeDto>> BuscarQuantidadeTotalDeCadaProduto()
+        {
+            var produtos = await _dbContext.Estoque
+                .Join(_dbContext.Produto,
+                      estoque => estoque.ProdutoId,
+                      produto => produto.ProdutoId,
+                      (estoque, produto) => new { produto.ProdutoId, produto.Nome })
+                .Distinct()
+                .ToListAsync();
+
+            var resultados = new List<ProdutoQuantidadeDto>();
+
+            foreach (var produto in produtos)
+            {
+                var quantidadeTotal = await CalcularQuantidadeTotalEstoque(produto.ProdutoId);
+                resultados.Add(new ProdutoQuantidadeDto
+                {
+                    ProdutoId = produto.ProdutoId,
+                    Nome = produto.Nome,
+                    QuantidadeTotal = quantidadeTotal
+                });
+            }
+
+            return resultados;
+        }
+
         public async Task<QuantidadePorTipoMovimentoResponseDto> ObterMovimentacoesPorProduto(int produtoId)
         {
             var produto = await _dbContext.Produto
