@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MonitoraEstoqueServico.Services;
 using MonitoraEstoqueServico;
 using ServiceMonitor.Services;
+using Microsoft.Extensions.Hosting;
 
 namespace ServiceMonitor
 {
@@ -25,6 +26,15 @@ namespace ServiceMonitor
             var mainForm = _serviceProvider.GetRequiredService<MainForm>();
             Application.Run(mainForm);
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .UseWindowsService() 
+            .ConfigureServices((hostContext, services) =>
+            {
+                ConfigureServices(services);
+            });
+
 
         private static void ConfigureServices(IServiceCollection services)
         {

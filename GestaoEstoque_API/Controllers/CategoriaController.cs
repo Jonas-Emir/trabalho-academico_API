@@ -4,7 +4,7 @@ using GestaoEstoque_API.Application.Dtos;
 
 namespace API_SistemaDeAtividades.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/categoria/")]
     [ApiController]
     public class CategoriaController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace API_SistemaDeAtividades.Controllers
             _categoriaRepositorio = categoriaRepositorio;
         }
 
-        [HttpGet("ListarCategorias")]
+        [HttpGet("listar/")]
         public async Task<ActionResult<List<CategoriaResponseDto>>> BuscarTodasCategorias()
         {
             try
@@ -29,7 +29,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpGet("BuscarPorId/{id}")]
+        [HttpGet("buscar/{id}")]
         public async Task<ActionResult<CategoriaResponseDto>> BuscarPorId(int id)
         {
             try
@@ -47,7 +47,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpPost("InserirCategoria")]
+        [HttpPost("inserir/")]
         public async Task<ActionResult<CategoriaRequestDto>> Cadastrar([FromBody] CategoriaRequestDto categoriaDto)
         {
             try
@@ -61,7 +61,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpPut("AtualizarCategoria/{id}")]
+        [HttpPut("atualizar/{id}")]
         public async Task<ActionResult<CategoriaRequestDto>> Atualizar([FromBody] CategoriaRequestDto categoriaDto, int id)
         {
             try
@@ -79,7 +79,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpDelete("ApagarCategoria/{id}")]
+        [HttpDelete("apagar/{id}")]
         public async Task<ActionResult<string>> Apagar(int id)
         {
             try

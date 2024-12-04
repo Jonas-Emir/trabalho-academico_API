@@ -4,7 +4,7 @@ using GestaoEstoque_API.Application.Dtos;
 
 namespace API_SistemaDeAtividades.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/produto/")]
     [ApiController]
     public class ProdutoController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace API_SistemaDeAtividades.Controllers
             _produtoRepositorio = produtoRepositorio;
         }
 
-        [HttpGet("ListarProdutos")]
+        [HttpGet("listar")]
         public async Task<ActionResult<List<ProdutoResponseDto>>> BuscarTodosProdutos()
         {
             try
@@ -29,7 +29,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpGet("BuscarPorId/{id}")]
+        [HttpGet("buscar/{id}")]
         public async Task<ActionResult<ProdutoResponseDto>> BuscarPorId(int id)
         {
             try
@@ -47,7 +47,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpPost("InserirProduto")]
+        [HttpPost("inserir")]
         public async Task<ActionResult<RequestProdutoDto>> Cadastrar([FromBody] RequestProdutoDto produto)
         {
             try
@@ -61,7 +61,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpPut("AtualizarProduto/{id}")]
+        [HttpPut("atualizar/{id}")]
         public async Task<ActionResult<RequestProdutoDto>> Atualizar([FromBody] RequestProdutoDto produtoDto, int id)
         {
             try
@@ -80,7 +80,7 @@ namespace API_SistemaDeAtividades.Controllers
             }
         }
 
-        [HttpDelete("ApagarProduto/{id}")]
+        [HttpDelete("apagar/{id}")]
         public async Task<ActionResult<bool>> Apagar(int id)
         {
             try

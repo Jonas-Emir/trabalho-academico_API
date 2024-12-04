@@ -4,7 +4,7 @@ using GestaoEstoque_API.Application.Dtos;
 
 namespace GestaoEstoque_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/fornecedor/")]
     [ApiController]
     public class FornecedorController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace GestaoEstoque_API.Controllers
             _fornecedorRepositorio = fornecedorRepositorio;
         }
 
-        [HttpGet("ListarFornecedores")]
+        [HttpGet("listar")]
         public ActionResult<List<FornecedorResponseDto>> ListarFornecedores()
         {
             try
@@ -29,7 +29,7 @@ namespace GestaoEstoque_API.Controllers
             }
         }
 
-        [HttpGet("BuscarPorId/{id}")]
+        [HttpGet("buscar/{id}")]
         public ActionResult<FornecedorResponseDto> BuscarPorId(int id)
         {
             try
@@ -47,7 +47,7 @@ namespace GestaoEstoque_API.Controllers
             }
         }
 
-        [HttpPost("InserirFornecedor")]
+        [HttpPost("inserir")]
         public async Task<ActionResult<FornecedorRequestDto>> Adicionar([FromBody] FornecedorRequestDto fornecedor)
         {
             try
@@ -61,7 +61,7 @@ namespace GestaoEstoque_API.Controllers
             }
         }
 
-        [HttpPut("AtualizarFornecedor/{id}")]
+        [HttpPut("atualizar/{id}")]
         public async Task<ActionResult<FornecedorRequestDto>> Atualizar([FromBody] FornecedorRequestDto fornecedorDto, int id)
         {
             try
@@ -82,7 +82,7 @@ namespace GestaoEstoque_API.Controllers
             }
         }
 
-        [HttpDelete("ApagarFornecedor/{id}")]
+        [HttpDelete("apagar/{id}")]
         public ActionResult<bool> ApagarFornecedor(int id)
         {
             try

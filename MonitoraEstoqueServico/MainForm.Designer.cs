@@ -87,7 +87,7 @@
             btnReiniciar.Name = "btnReiniciar";
             btnReiniciar.Size = new Size(192, 35);
             btnReiniciar.TabIndex = 7;
-            btnReiniciar.Text = "Reiniciar Serviço";
+            btnReiniciar.Text = "Reiniciar Monitoramento";
             btnReiniciar.UseVisualStyleBackColor = true;
             btnReiniciar.Click += btnReiniciar_Click;
             // 
@@ -154,9 +154,9 @@
             // 
             // nrIntervalo
             // 
-            nrIntervalo.Location = new Point(199, 53);
+            nrIntervalo.Location = new Point(181, 53);
             nrIntervalo.Name = "nrIntervalo";
-            nrIntervalo.Size = new Size(42, 23);
+            nrIntervalo.Size = new Size(50, 23);
             nrIntervalo.TabIndex = 25;
             // 
             // lnkLogs
@@ -182,9 +182,9 @@
             // 
             // txtNotificaEmail
             // 
-            txtNotificaEmail.Location = new Point(201, 82);
+            txtNotificaEmail.Location = new Point(183, 82);
             txtNotificaEmail.Name = "txtNotificaEmail";
-            txtNotificaEmail.Size = new Size(125, 23);
+            txtNotificaEmail.Size = new Size(143, 23);
             txtNotificaEmail.TabIndex = 22;
             // 
             // strFormatoIntervalo
@@ -192,29 +192,30 @@
             strFormatoIntervalo.DropDownStyle = ComboBoxStyle.DropDownList;
             strFormatoIntervalo.FormattingEnabled = true;
             strFormatoIntervalo.Items.AddRange(new object[] { "Segundos", "Minutos", "Horas" });
-            strFormatoIntervalo.Location = new Point(247, 53);
+            strFormatoIntervalo.Location = new Point(249, 52);
             strFormatoIntervalo.Name = "strFormatoIntervalo";
-            strFormatoIntervalo.Size = new Size(79, 23);
+            strFormatoIntervalo.Size = new Size(77, 23);
             strFormatoIntervalo.TabIndex = 21;
             // 
             // nrEstoqueBaixo
             // 
-            nrEstoqueBaixo.Location = new Point(201, 140);
+            nrEstoqueBaixo.Location = new Point(183, 140);
             nrEstoqueBaixo.Name = "nrEstoqueBaixo";
-            nrEstoqueBaixo.Size = new Size(40, 23);
+            nrEstoqueBaixo.Size = new Size(48, 23);
             nrEstoqueBaixo.TabIndex = 20;
             // 
             // nrEstoqueAlto
             // 
-            nrEstoqueAlto.Location = new Point(201, 111);
+            nrEstoqueAlto.Location = new Point(183, 111);
+            nrEstoqueAlto.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             nrEstoqueAlto.Name = "nrEstoqueAlto";
-            nrEstoqueAlto.Size = new Size(40, 23);
+            nrEstoqueAlto.Size = new Size(48, 23);
             nrEstoqueAlto.TabIndex = 19;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(67, 85);
+            label5.Location = new Point(49, 85);
             label5.Name = "label5";
             label5.Size = new Size(132, 15);
             label5.TabIndex = 17;
@@ -223,16 +224,16 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(41, 142);
+            label6.Location = new Point(16, 142);
             label6.Name = "label6";
-            label6.Size = new Size(158, 15);
+            label6.Size = new Size(165, 15);
             label6.TabIndex = 16;
-            label6.Text = "Quantiade de Estoque Baixo:";
+            label6.Text = "Quantidade de Estoque Baixo:";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(41, 114);
+            label7.Location = new Point(23, 114);
             label7.Name = "label7";
             label7.Size = new Size(158, 15);
             label7.TabIndex = 15;
@@ -241,7 +242,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(74, 57);
+            label8.Location = new Point(56, 57);
             label8.Name = "label8";
             label8.Size = new Size(125, 15);
             label8.TabIndex = 14;
@@ -264,7 +265,7 @@
             ClientSize = new Size(388, 267);
             Controls.Add(tabControl1);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "Monitoramento de Estoque";
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();

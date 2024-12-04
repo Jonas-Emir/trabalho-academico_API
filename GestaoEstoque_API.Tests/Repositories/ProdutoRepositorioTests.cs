@@ -168,18 +168,6 @@ namespace GestaoEstoque_API.Tests.Repositories
                 Preco = 2000.00m,
                 Ativo = false
             };
-
-            _mapperMock.Setup(m => m.Map<Produto>(It.IsAny<RequestProdutoDto>()))
-           .Returns(new Produto
-           {
-               Nome = "Monitor",
-               CategoriaId = 1,
-               FornecedorId = 1,
-               Preco = 1000.00m,
-               Ativo = true,
-               DataCriacao = DateTime.Now
-           });
-
          
             _mapperMock.Setup(m => m.Map<RequestProdutoDto>(It.IsAny<Produto>())).Returns(produtoAtualizado);
             var resultado = await _produtoRepositorio.Atualizar(produtoAtualizado, 1);
@@ -191,27 +179,17 @@ namespace GestaoEstoque_API.Tests.Repositories
         }
 
         [Fact]
-        public async Task Apagar_DeveRemoverProduto()
+        public async Task Apagar_DeveLancarExcecao_SeHouverVinculo()
         {
-            var produto = new Produto
-            {
-                ProdutoId = 1,
-                Nome = "Notebook",
-                Preco = 3500.00m,
-                Ativo = true,
-                CategoriaId = 1,
-                FornecedorId = 1,
-                DataCriacao = DateTime.Now,
-            };
+            SeedDatabase();
 
-            _dbContext.Produto.Add(produto);
-            await _dbContext.SaveChangesAsync();
+            var produtoId = 1; 
+            var exception = await Assert.ThrowsAsync<Exception>(() => _produtoRepositorio.Apagar(produtoId));
 
-            var resultado = await _produtoRepositorio.Apagar(1);
- 
-            Assert.True(resultado);
-            Assert.Null(await _dbContext.Produto.FindAsync(1));
+            Assert.Equal("O produto com ID: 1 possui vínculos com uma categoria ou fornecedor e não pode ser excluído.", exception.Message);
+
+            var produtoPersistente = await _dbContext.Produto.FindAsync(produtoId);
+            Assert.NotNull(produtoPersistente);
         }
-
     }
 }

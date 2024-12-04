@@ -105,7 +105,7 @@ namespace MonitoraEstoqueServico
 
                 _monitoramentoService.RegistrarLog($"");
                 _monitoramentoService.RegistrarLog("--- Serviço iniciado ---");
-                _monitoramentoService.RegistrarLog($"Serviço iniciado com o intervalo configurado de {_configuracao.IntervaloExecucoes.TotalMinutes} minutos.");
+                _monitoramentoService.RegistrarLog($"Serviço iniciado com o intervalo configurado de {_configuracao.IntervaloExecucoes} {_configuracao.StrFormatoIntervalo} ");
                 StatusServico("Serviço iniciado", Color.Green);
 
             }

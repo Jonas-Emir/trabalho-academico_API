@@ -140,7 +140,6 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
                     Quantidade = g.Sum(e => e.Quantidade)
                 })
                 .ToListAsync();
-            movimentos.RemoveAt(3);
 
             var quantidadePorTipoMovimento = movimentos
                 .ToDictionary(

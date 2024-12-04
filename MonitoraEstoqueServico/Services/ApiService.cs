@@ -19,7 +19,7 @@ namespace ServiceMonitor.Services
         {
             try
             {
-                var response = await _httpClient.GetAsync("/api/estoque/BuscarQuantidadeTotalEstoque");
+                var response = await _httpClient.GetAsync("/api/estoque/buscar-quantidade-estoque-total");
 
                 if (response.IsSuccessStatusCode)
                 {

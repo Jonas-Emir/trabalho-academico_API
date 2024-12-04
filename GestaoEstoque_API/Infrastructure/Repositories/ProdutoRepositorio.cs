@@ -80,6 +80,9 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
             if (produtoColetado == null)
                 throw new Exception($"Produto para o ID: {produtoId} não foi encontrado no banco de dados.");
 
+            if (await ProdutoTemVinculo(produtoId))
+                throw new Exception($"O produto com ID: {produtoId} possui vínculos com uma categoria ou fornecedor e não pode ser excluído.");
+
             _dbContext.Produto.Remove(produtoColetado);
             await _dbContext.SaveChangesAsync();
 
@@ -105,6 +108,17 @@ namespace GestaoEstoque_API.Infrastructure.Repositories
 
             if (erros.Any())
                 throw new Exception(string.Join(" ", erros));
+        }
+
+        private async Task<bool> ProdutoTemVinculo(int produtoId)
+        {
+            var temCategoria = await _dbContext.Produto
+                .AnyAsync(p => p.ProdutoId == produtoId && p.CategoriaId != null);
+
+            var temFornecedor = await _dbContext.Produto
+                .AnyAsync(p => p.ProdutoId == produtoId && p.FornecedorId != null);
+
+            return temCategoria || temFornecedor;
         }
 
         private async Task<bool> VerificarProdutoExistente(string nomeProduto, int? produtoId = null)
